@@ -5,6 +5,8 @@ import { Button } from '../ui/button';
 import { substituteApi, classApi, organizationApi, userApi } from '../../lib/api';
 import { SubstituteRequest, Class, Organization, User } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
+import { CSVExporter, ReportGenerator } from '../../lib/export';
+import { useNotifications } from '../../contexts/NotificationContext';
 
 interface AnalyticsData {
   totalRequests: number;
@@ -19,6 +21,7 @@ interface AnalyticsData {
 
 export function AnalyticsDashboard() {
   const { user } = useAuth();
+  const { addNotification } = useNotifications();
   const [requests, setRequests] = useState<SubstituteRequest[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -189,9 +192,52 @@ export function AnalyticsDashboard() {
     return months;
   };
 
-  const handleExportData = () => {
-    // This will be implemented with the export functionality
-    console.log('Export analytics data');
+  const handleExportData = async () => {
+    if (!analytics) {
+      addNotification({
+        title: 'Export Error',
+        body: 'No analytics data available to export',
+        notification_type: 'error'
+      });
+      return;
+    }
+
+    try {
+      // Export analytics data
+      CSVExporter.exportAnalyticsData(analytics, timeRange);
+      
+      addNotification({
+        title: 'Export Successful',
+        body: 'Analytics report has been downloaded',
+        notification_type: 'success'
+      });
+    } catch (error) {
+      console.error('Export failed:', error);
+      addNotification({
+        title: 'Export Failed',
+        body: 'Failed to export analytics data',
+        notification_type: 'error'
+      });
+    }
+  };
+
+  const handleExportFullReport = async () => {
+    try {
+      await ReportGenerator.generateFullReport(requests, classes, organizations, users, timeRange);
+      
+      addNotification({
+        title: 'Full Report Generated',
+        body: 'Complete system report has been downloaded',
+        notification_type: 'success'
+      });
+    } catch (error) {
+      console.error('Report generation failed:', error);
+      addNotification({
+        title: 'Report Generation Failed',
+        body: 'Failed to generate full report',
+        notification_type: 'error'
+      });
+    }
   };
 
   if (loading) {
@@ -251,10 +297,17 @@ export function AnalyticsDashboard() {
             Refresh
           </Button>
           
-          <Button onClick={handleExportData}>
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={handleExportData}>
+              <Download className="w-4 h-4 mr-2" />
+              Export Analytics
+            </Button>
+            
+            <Button onClick={handleExportFullReport}>
+              <Download className="w-4 h-4 mr-2" />
+              Full Report
+            </Button>
+          </div>
         </div>
       </div>
 

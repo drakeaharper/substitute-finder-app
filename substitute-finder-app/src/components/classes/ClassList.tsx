@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, GraduationCap, Building, Users } from 'lucide-react';
+import { Plus, Edit, Trash2, GraduationCap, Building, Users, Download } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { classApi, organizationApi } from '../../lib/api';
 import { Class, Organization } from '../../types';
 import { ClassForm } from './ClassForm';
+import { CSVExporter } from '../../lib/export';
+import { useNotifications } from '../../contexts/NotificationContext';
 
 export function ClassList() {
+  const { addNotification } = useNotifications();
   const [classes, setClasses] = useState<Class[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,6 +68,24 @@ export function ClassList() {
     setShowForm(true);
   };
 
+  const handleExportClasses = async () => {
+    try {
+      CSVExporter.exportClasses(filteredClasses, organizations);
+      addNotification({
+        title: 'Export Successful',
+        body: 'Classes have been exported to CSV',
+        notification_type: 'success'
+      });
+    } catch (error) {
+      console.error('Export failed:', error);
+      addNotification({
+        title: 'Export Failed',
+        body: 'Failed to export classes',
+        notification_type: 'error'
+      });
+    }
+  };
+
   const getOrganizationName = (orgId: string) => {
     const org = organizations.find(o => o.id === orgId);
     return org?.name || 'Unknown Organization';
@@ -89,10 +110,17 @@ export function ClassList() {
           <h2 className="text-3xl font-bold">Classes</h2>
           <p className="text-muted-foreground">Manage classes and their details</p>
         </div>
-        <Button onClick={handleAdd}>
-          <Plus className="w-4 h-4 mr-2" />
-          Add Class
-        </Button>
+        
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExportClasses}>
+            <Download className="w-4 h-4 mr-2" />
+            Export CSV
+          </Button>
+          <Button onClick={handleAdd}>
+            <Plus className="w-4 h-4 mr-2" />
+            Add Class
+          </Button>
+        </div>
       </div>
 
       {error && (

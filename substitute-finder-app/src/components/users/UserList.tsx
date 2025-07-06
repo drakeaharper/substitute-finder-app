@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Users, Shield, User as UserIcon, Building } from 'lucide-react';
+import { Plus, Edit, Trash2, Users, Shield, User as UserIcon, Building, Download } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { userApi, organizationApi } from '../../lib/api';
 import { User, Organization } from '../../types';
 import { UserForm } from './UserForm';
+import { CSVExporter } from '../../lib/export';
+import { useNotifications } from '../../contexts/NotificationContext';
 
 interface UserListProps {
   currentUser: User;
 }
 
 export function UserList({ currentUser }: UserListProps) {
+  const { addNotification } = useNotifications();
   const [users, setUsers] = useState<User[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,6 +58,24 @@ export function UserList({ currentUser }: UserListProps) {
   const handleAdd = () => {
     setEditingUser(null);
     setShowForm(true);
+  };
+
+  const handleExportUsers = async () => {
+    try {
+      CSVExporter.exportUsers(filteredUsers, organizations);
+      addNotification({
+        title: 'Export Successful',
+        body: 'Users have been exported to CSV',
+        notification_type: 'success'
+      });
+    } catch (error) {
+      console.error('Export failed:', error);
+      addNotification({
+        title: 'Export Failed',
+        body: 'Failed to export users',
+        notification_type: 'error'
+      });
+    }
   };
 
   const getOrganizationName = (orgId?: string) => {
@@ -121,12 +142,19 @@ export function UserList({ currentUser }: UserListProps) {
           <h2 className="text-3xl font-bold">Users</h2>
           <p className="text-muted-foreground">Manage user accounts and permissions</p>
         </div>
-        {currentUser.role === 'admin' && (
-          <Button onClick={handleAdd}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add User
+        
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExportUsers}>
+            <Download className="w-4 h-4 mr-2" />
+            Export CSV
           </Button>
-        )}
+          {currentUser.role === 'admin' && (
+            <Button onClick={handleAdd}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add User
+            </Button>
+          )}
+        </div>
       </div>
 
       {error && (

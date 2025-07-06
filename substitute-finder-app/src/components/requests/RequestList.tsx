@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Clock, CheckCircle, XCircle, Calendar, MapPin, User, Building, Check, X } from 'lucide-react';
+import { Plus, Clock, CheckCircle, XCircle, Calendar, MapPin, User, Building, Check, X, Download } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { substituteApi, classApi, organizationApi, userApi } from '../../lib/api';
@@ -7,6 +7,7 @@ import { SubstituteRequest, Class, Organization, User as UserType } from '../../
 import { RequestForm } from './RequestForm';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotifications } from '../../contexts/NotificationContext';
+import { CSVExporter } from '../../lib/export';
 
 export function RequestList() {
   const { user } = useAuth();
@@ -120,6 +121,24 @@ export function RequestList() {
     }
   };
 
+  const handleExportRequests = async () => {
+    try {
+      CSVExporter.exportSubstituteRequests(requests, classes, organizations, users);
+      addNotification({
+        title: 'Export Successful',
+        body: 'Substitute requests have been exported to CSV',
+        notification_type: 'success'
+      });
+    } catch (error) {
+      console.error('Export failed:', error);
+      addNotification({
+        title: 'Export Failed',
+        body: 'Failed to export substitute requests',
+        notification_type: 'error'
+      });
+    }
+  };
+
   const handleFormSubmit = async () => {
     setShowForm(false);
     setEditingRequest(null);
@@ -217,12 +236,19 @@ export function RequestList() {
           <h2 className="text-3xl font-bold">Substitute Requests</h2>
           <p className="text-muted-foreground">Manage substitute teacher requests and assignments</p>
         </div>
-        {(user?.role === 'admin' || user?.role === 'org_manager') && (
-          <Button onClick={handleAdd}>
-            <Plus className="w-4 h-4 mr-2" />
-            Create Request
+        
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExportRequests}>
+            <Download className="w-4 h-4 mr-2" />
+            Export CSV
           </Button>
-        )}
+          {(user?.role === 'admin' || user?.role === 'org_manager') && (
+            <Button onClick={handleAdd}>
+              <Plus className="w-4 h-4 mr-2" />
+              Create Request
+            </Button>
+          )}
+        </div>
       </div>
 
       {error && (
