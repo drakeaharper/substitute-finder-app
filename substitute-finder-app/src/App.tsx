@@ -8,10 +8,13 @@ import { RequestList } from "./components/requests/RequestList";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import { LoginForm } from "./components/auth/LoginForm";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { NotificationProvider } from "./contexts/NotificationContext";
+import { useToast } from "./components/notifications/NotificationToast";
 
 function AppContent() {
   const { user, login, isLoading } = useAuth();
   const [currentPage, setCurrentPage] = useState("dashboard");
+  const { ToastContainer } = useToast();
 
   if (isLoading) {
     return (
@@ -58,6 +61,7 @@ function AppContent() {
           {renderCurrentPage()}
         </main>
       </div>
+      <ToastContainer />
     </div>
   );
 }
@@ -65,7 +69,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <NotificationProvider>
+        <AppContent />
+      </NotificationProvider>
     </AuthProvider>
   );
 }

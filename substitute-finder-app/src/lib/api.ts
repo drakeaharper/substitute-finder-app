@@ -80,10 +80,37 @@ export const substituteApi = {
   
   delete: (id: string): Promise<void> =>
     invoke('delete_substitute_request', { id }),
+  
+  accept: (requestId: string, substituteId: string): Promise<SubstituteRequest> =>
+    invoke('accept_substitute_request', { requestId, substituteId }),
+  
+  decline: (requestId: string): Promise<SubstituteRequest> =>
+    invoke('decline_substitute_request', { requestId }),
+  
+  getForUser: (userId: string, userRole: string): Promise<SubstituteRequest[]> =>
+    invoke('get_substitute_requests_for_user', { userId, userRole }),
 };
 
 // Seed API
 export const seedApi = {
   seedDatabase: (): Promise<string> =>
     invoke('seed_database'),
+};
+
+// Notification API
+export const notificationApi = {
+  send: (title: string, body: string, requestId?: string, userId?: string): Promise<string> =>
+    invoke('send_notification', { title, body, requestId, userId }),
+  
+  log: (userId: string, requestId: string, notificationType: string, status: string, errorMessage?: string): Promise<string> =>
+    invoke('log_notification', { userId, requestId, notificationType, status, errorMessage }),
+  
+  getLogs: (userId?: string): Promise<any[]> =>
+    invoke('get_notification_logs', { userId }),
+  
+  notifySubstituteRequestCreated: (requestId: string, className: string, dateNeeded: string, substituteUserIds: string[]): Promise<string[]> =>
+    invoke('notify_substitute_request_created', { requestId, className, dateNeeded, substituteUserIds }),
+  
+  requestPermission: (): Promise<boolean> =>
+    invoke('request_notification_permission'),
 };

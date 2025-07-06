@@ -191,6 +191,104 @@ pub fn get_substitute_request_by_id(
 }
 
 #[tauri::command]
+pub fn accept_substitute_request(
+    state: State<'_, AppState>,
+    request_id: String,
+    substitute_id: String,
+) -> Result<SubstituteRequest, String> {
+    update_substitute_request_status(state, request_id, "filled".to_string(), Some(substitute_id))
+}
+
+#[tauri::command]
+pub fn decline_substitute_request(
+    state: State<'_, AppState>,
+    request_id: String,
+) -> Result<SubstituteRequest, String> {
+    // For now, declining just keeps the request open for others
+    // In a more advanced system, we might track who declined
+    get_substitute_request_by_id(state, request_id)?
+        .ok_or_else(|| "Substitute request not found".to_string())
+}
+
+#[tauri::command]
+pub fn get_substitute_requests_for_user(
+    state: State<'_, AppState>,
+    user_id: String,
+    user_role: String,
+) -> Result<Vec<SubstituteRequest>, String> {
+    let conn = state.get_connection();
+    let conn = conn.lock().map_err(|e| e.to_string())?;
+    
+    let query = match user_role.as_str() {
+        "substitute" => {
+            // For substitutes, show open requests or requests assigned to them
+            "SELECT id, class_id, requested_by, date_needed, start_time, end_time, reason, special_instructions, status, assigned_substitute_id, created_at, updated_at
+             FROM substitute_requests 
+             WHERE status = 'open' OR assigned_substitute_id = ?1
+             ORDER BY date_needed, start_time"
+        },
+        "org_manager" => {
+            // For org managers, show requests they created
+            "SELECT id, class_id, requested_by, date_needed, start_time, end_time, reason, special_instructions, status, assigned_substitute_id, created_at, updated_at
+             FROM substitute_requests 
+             WHERE requested_by = ?1
+             ORDER BY date_needed, start_time"
+        },
+        _ => {
+            // For admins, show all requests
+            "SELECT id, class_id, requested_by, date_needed, start_time, end_time, reason, special_instructions, status, assigned_substitute_id, created_at, updated_at
+             FROM substitute_requests 
+             ORDER BY date_needed, start_time"
+        }
+    };
+    
+    let mut stmt = conn.prepare(query).map_err(|e| e.to_string())?;
+    
+    let requests = if user_role == "admin" {
+        stmt.query_map([], |row| {
+            Ok(SubstituteRequest {
+                id: row.get(0)?,
+                class_id: row.get(1)?,
+                requested_by: row.get(2)?,
+                date_needed: row.get(3)?,
+                start_time: row.get(4)?,
+                end_time: row.get(5)?,
+                reason: row.get(6)?,
+                special_instructions: row.get(7)?,
+                status: row.get::<_, String>(8)?.parse().unwrap_or(RequestStatus::Open),
+                assigned_substitute_id: row.get(9)?,
+                created_at: row.get::<_, String>(10)?.parse().unwrap_or_else(|_| Utc::now()),
+                updated_at: row.get::<_, String>(11)?.parse().unwrap_or_else(|_| Utc::now()),
+            })
+        }).map_err(|e| e.to_string())?
+    } else {
+        stmt.query_map([&user_id], |row| {
+            Ok(SubstituteRequest {
+                id: row.get(0)?,
+                class_id: row.get(1)?,
+                requested_by: row.get(2)?,
+                date_needed: row.get(3)?,
+                start_time: row.get(4)?,
+                end_time: row.get(5)?,
+                reason: row.get(6)?,
+                special_instructions: row.get(7)?,
+                status: row.get::<_, String>(8)?.parse().unwrap_or(RequestStatus::Open),
+                assigned_substitute_id: row.get(9)?,
+                created_at: row.get::<_, String>(10)?.parse().unwrap_or_else(|_| Utc::now()),
+                updated_at: row.get::<_, String>(11)?.parse().unwrap_or_else(|_| Utc::now()),
+            })
+        }).map_err(|e| e.to_string())?
+    };
+    
+    let mut result = Vec::new();
+    for request in requests {
+        result.push(request.map_err(|e| e.to_string())?);
+    }
+    
+    Ok(result)
+}
+
+#[tauri::command]
 pub fn delete_substitute_request(
     state: State<'_, AppState>,
     id: String,

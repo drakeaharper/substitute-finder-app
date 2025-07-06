@@ -2,6 +2,7 @@ import React from 'react';
 import { LogOut, User as UserIcon } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useAuth } from '../../contexts/AuthContext';
+import { NotificationCenter } from '../notifications/NotificationCenter';
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -30,6 +31,8 @@ export function Header() {
         </div>
         
         <div className="flex items-center gap-4">
+          <NotificationCenter />
+          
           <div className="text-right">
             <div className="flex items-center gap-2 text-sm font-medium">
               <UserIcon className="w-4 h-4" />

@@ -16,6 +16,7 @@ pub fn run() {
     
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_notification::init())
         .manage(Arc::new(db_manager))
         .invoke_handler(tauri::generate_handler![
             greet,
@@ -44,6 +45,15 @@ pub fn run() {
             commands::substitute::get_substitute_request_by_id,
             commands::substitute::update_substitute_request_status,
             commands::substitute::delete_substitute_request,
+            commands::substitute::accept_substitute_request,
+            commands::substitute::decline_substitute_request,
+            commands::substitute::get_substitute_requests_for_user,
+            // Notification commands
+            commands::notification::send_notification,
+            commands::notification::log_notification,
+            commands::notification::get_notification_logs,
+            commands::notification::notify_substitute_request_created,
+            commands::notification::request_notification_permission,
             // Seed command
             commands::seed::seed_database,
         ])

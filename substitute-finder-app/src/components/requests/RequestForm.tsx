@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { substituteApi } from '../../lib/api';
-import { SubstituteRequest, Class, CreateSubstituteRequestRequest } from '../../types';
+import { substituteApi, notificationApi } from '../../lib/api';
+import { SubstituteRequest, Class, CreateSubstituteRequestRequest, User as UserType } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNotifications } from '../../contexts/NotificationContext';
 
 interface RequestFormProps {
   request?: SubstituteRequest | null;
   classes: Class[];
+  users: UserType[];
   onSubmit: () => void;
   onCancel: () => void;
 }
 
-export function RequestForm({ request: editRequest, classes, onSubmit, onCancel }: RequestFormProps) {
+export function RequestForm({ request: editRequest, classes, users, onSubmit, onCancel }: RequestFormProps) {
   const { user } = useAuth();
+  const { addNotification } = useNotifications();
   const [formData, setFormData] = useState<CreateSubstituteRequestRequest>({
     class_id: editRequest?.class_id || '',
     date_needed: editRequest?.date_needed || '',
@@ -52,7 +55,46 @@ export function RequestForm({ request: editRequest, classes, onSubmit, onCancel 
         return;
       }
 
-      await substituteApi.create(user.id, submitData);
+      const newRequest = await substituteApi.create(user.id, submitData);
+      
+      // Send notifications to substitute teachers
+      try {
+        const selectedClass = classes.find(cls => cls.id === submitData.class_id);
+        const className = selectedClass ? selectedClass.name : 'Unknown Class';
+        
+        // Get all substitute teachers
+        const substituteTeachers = users.filter(u => u.role === 'substitute');
+        const substituteUserIds = substituteTeachers.map(u => u.id);
+        
+        if (substituteUserIds.length > 0) {
+          await notificationApi.notifySubstituteRequestCreated(
+            newRequest.id,
+            className,
+            submitData.date_needed,
+            substituteUserIds
+          );
+          
+          addNotification({
+            title: 'Notifications Sent',
+            body: `Notified ${substituteUserIds.length} substitute teachers about the new request`,
+            notification_type: 'success'
+          });
+        } else {
+          addNotification({
+            title: 'No Substitutes Available',
+            body: 'No substitute teachers found to notify',
+            notification_type: 'warning'
+          });
+        }
+      } catch (notificationError) {
+        console.error('Failed to send notifications:', notificationError);
+        addNotification({
+          title: 'Notification Error',
+          body: 'Request created but failed to notify substitutes',
+          notification_type: 'warning'
+        });
+      }
+      
       onSubmit();
     } catch (err) {
       setError(`Failed to ${editRequest ? 'update' : 'create'} substitute request`);

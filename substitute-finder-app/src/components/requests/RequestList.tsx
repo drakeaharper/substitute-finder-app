@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Clock, CheckCircle, XCircle, Calendar, MapPin, User, Building } from 'lucide-react';
+import { Plus, Clock, CheckCircle, XCircle, Calendar, MapPin, User, Building, Check, X } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { substituteApi, classApi, organizationApi, userApi } from '../../lib/api';
 import { SubstituteRequest, Class, Organization, User as UserType } from '../../types';
 import { RequestForm } from './RequestForm';
 import { useAuth } from '../../contexts/AuthContext';
+import { useNotifications } from '../../contexts/NotificationContext';
 
 export function RequestList() {
   const { user } = useAuth();
+  const { addNotification } = useNotifications();
   const [requests, setRequests] = useState<SubstituteRequest[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -21,17 +23,26 @@ export function RequestList() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [user]);
 
   const loadData = async () => {
     try {
       setLoading(true);
-      const [requestsData, classesData, orgsData, usersData] = await Promise.all([
-        substituteApi.getAll(),
+      let requestsData;
+      
+      // Use role-based filtering for requests
+      if (user) {
+        requestsData = await substituteApi.getForUser(user.id, user.role);
+      } else {
+        requestsData = await substituteApi.getAll();
+      }
+      
+      const [classesData, orgsData, usersData] = await Promise.all([
         classApi.getAll(),
         organizationApi.getAll(),
         userApi.getAll()
       ]);
+      
       setRequests(requestsData);
       setClasses(classesData);
       setOrganizations(orgsData);
@@ -64,6 +75,48 @@ export function RequestList() {
     } catch (err) {
       setError('Failed to update request status');
       console.error('Error updating status:', err);
+    }
+  };
+
+  const handleAcceptRequest = async (requestId: string) => {
+    if (!user) return;
+    
+    try {
+      await substituteApi.accept(requestId, user.id);
+      addNotification({
+        title: 'Request Accepted',
+        body: 'You have successfully accepted this substitute request',
+        notification_type: 'success'
+      });
+      await loadData();
+    } catch (err) {
+      setError('Failed to accept request');
+      addNotification({
+        title: 'Error',
+        body: 'Failed to accept the substitute request',
+        notification_type: 'error'
+      });
+      console.error('Error accepting request:', err);
+    }
+  };
+
+  const handleDeclineRequest = async (requestId: string) => {
+    try {
+      await substituteApi.decline(requestId);
+      addNotification({
+        title: 'Request Declined',
+        body: 'You have declined this substitute request',
+        notification_type: 'info'
+      });
+      await loadData();
+    } catch (err) {
+      setError('Failed to decline request');
+      addNotification({
+        title: 'Error',
+        body: 'Failed to decline the substitute request',
+        notification_type: 'error'
+      });
+      console.error('Error declining request:', err);
     }
   };
 
@@ -204,6 +257,7 @@ export function RequestList() {
           <RequestForm
             request={editingRequest}
             classes={classes}
+            users={users}
             onSubmit={handleFormSubmit}
             onCancel={() => {
               setShowForm(false);
@@ -319,6 +373,38 @@ export function RequestList() {
                         <XCircle className="w-4 h-4 mr-1" />
                         Cancel
                       </Button>
+                    </div>
+                  )}
+
+                  {request.status === 'open' && user?.role === 'substitute' && !request.assigned_substitute_id && (
+                    <div className="flex gap-2 pt-3 border-t">
+                      <Button
+                        size="sm"
+                        onClick={() => handleAcceptRequest(request.id)}
+                        className="flex-1 bg-green-600 hover:bg-green-700"
+                      >
+                        <Check className="w-4 h-4 mr-1" />
+                        Accept
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleDeclineRequest(request.id)}
+                        className="flex-1"
+                      >
+                        <X className="w-4 h-4 mr-1" />
+                        Decline
+                      </Button>
+                    </div>
+                  )}
+
+                  {request.status === 'filled' && user?.role === 'substitute' && request.assigned_substitute_id === user.id && (
+                    <div className="pt-3 border-t">
+                      <div className="px-3 py-2 bg-green-50 border border-green-200 rounded-md text-center">
+                        <span className="text-sm font-medium text-green-800">
+                          ✅ You have accepted this request
+                        </span>
+                      </div>
                     </div>
                   )}
 

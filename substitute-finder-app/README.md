@@ -11,22 +11,23 @@ A cross-platform desktop application built with Tauri, React, and TypeScript to 
 - **User Management**: Full user interface with role-based permissions and organization assignment
 - **Substitute Request Workflow**: Complete request creation, management, and status tracking
 - **Dashboard & Analytics**: Real-time metrics, upcoming requests, and system overview
+- **Desktop Notifications**: Real-time desktop alerts using Tauri notification system
+- **Substitute Response System**: Accept/decline requests with role-based filtering and notifications
+- **Notification Center**: In-app notification center with bell icon and history
 - **Admin Panel**: Professional interface with header, sidebar navigation, and responsive design
 - **Database**: SQLite with comprehensive schema and demo data seeding
 - **Backend API**: Full CRUD operations via Rust Tauri commands with authentication
 
 ### 🚧 **In Development**
-- Desktop notifications for real-time alerts
-- Advanced reporting and analytics
-- Substitute availability matching
-- Email/SMS notification integration
+- Advanced reporting and analytics dashboard
+- Export functionality (CSV/Excel reports)
+- Settings management and configuration
 
 ### 📋 **Planned Features**
 - Multi-teacher class assignments
-- Substitute response system (accept/decline requests)
 - Advanced availability matching algorithms
 - Automated request assignment
-- Export functionality (CSV/Excel reports)
+- Email/SMS notification integration
 - Mobile app (via Tauri Mobile when available)
 
 ## Tech Stack
@@ -109,9 +110,11 @@ src/
 │   ├── organizations/   # Organization management components
 │   ├── classes/         # Class management components
 │   ├── users/           # User management components
-│   └── requests/        # Substitute request management components
+│   ├── requests/        # Substitute request management components
+│   └── notifications/   # Notification center and toast components
 ├── contexts/
-│   └── AuthContext.tsx # Authentication state management
+│   ├── AuthContext.tsx         # Authentication state management
+│   └── NotificationContext.tsx # Notification state management
 ├── lib/
 │   ├── api.ts          # Tauri API calls
 │   └── utils.ts        # Utility functions
@@ -120,7 +123,7 @@ src/
 
 src-tauri/
 ├── src/
-│   ├── commands/       # Tauri command handlers (organization, class, user, auth, seed)
+│   ├── commands/       # Tauri command handlers (organization, class, user, auth, substitute, notification, seed)
 │   ├── database/       # Database models, schema, and connection management
 │   └── lib.rs         # Main Tauri application
 ├── Cargo.toml         # Rust dependencies
@@ -192,9 +195,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [x] Status management (open, filled, cancelled)
 - [x] Role-based request access and permissions
 
-### Phase 4: Advanced Features 📋
-- [ ] Desktop notifications for real-time alerts
-- [ ] Substitute response system (accept/decline requests)
+### Phase 4: Advanced Features ✅
+- [x] Desktop notifications for real-time alerts
+- [x] Substitute response system (accept/decline requests)
 - [ ] Advanced analytics and reporting dashboard
 - [ ] Export functionality (CSV/Excel reports)
 - [ ] Settings management and configuration
