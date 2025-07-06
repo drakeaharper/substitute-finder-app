@@ -4,6 +4,8 @@ import { Header } from "./components/layout/Header";
 import { OrganizationList } from "./components/organizations/OrganizationList";
 import { ClassList } from "./components/classes/ClassList";
 import { UserList } from "./components/users/UserList";
+import { RequestList } from "./components/requests/RequestList";
+import { Dashboard } from "./components/dashboard/Dashboard";
 import { LoginForm } from "./components/auth/LoginForm";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
@@ -28,23 +30,13 @@ function AppContent() {
       case "organizations":
         return <OrganizationList />;
       case "dashboard":
-        return (
-          <div className="p-6">
-            <h2 className="text-3xl font-bold mb-4">Dashboard</h2>
-            <p className="text-muted-foreground">Welcome to the Substitute Finder Admin Panel</p>
-          </div>
-        );
+        return <Dashboard />;
       case "classes":
         return <ClassList />;
       case "users":
         return <UserList currentUser={user} />;
       case "requests":
-        return (
-          <div className="p-6">
-            <h2 className="text-3xl font-bold mb-4">Substitute Requests</h2>
-            <p className="text-muted-foreground">Request management coming soon...</p>
-          </div>
-        );
+        return <RequestList />;
       case "settings":
         return (
           <div className="p-6">

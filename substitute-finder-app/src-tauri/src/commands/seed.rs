@@ -130,5 +130,66 @@ pub fn seed_database(state: State<'_, AppState>) -> Result<String, String> {
         ),
     ).map_err(|e| e.to_string())?;
     
+    // Create sample substitute requests
+    let req1_id = Uuid::new_v4().to_string();
+    let tomorrow = chrono::Utc::now() + chrono::Duration::days(1);
+    conn.execute(
+        "INSERT INTO substitute_requests (id, class_id, requested_by, date_needed, start_time, end_time, reason, special_instructions, status, created_at, updated_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
+        (
+            &req1_id,
+            &class1_id,
+            &manager_id,
+            &tomorrow.format("%Y-%m-%d").to_string(),
+            "08:30",
+            "15:00",
+            "Sick Leave",
+            "Please follow the lesson plan on the desk. Math worksheets are in the file cabinet.",
+            "open",
+            &Utc::now().to_rfc3339(),
+            &Utc::now().to_rfc3339(),
+        ),
+    ).map_err(|e| e.to_string())?;
+    
+    let req2_id = Uuid::new_v4().to_string();
+    let next_week = chrono::Utc::now() + chrono::Duration::days(5);
+    conn.execute(
+        "INSERT INTO substitute_requests (id, class_id, requested_by, date_needed, start_time, end_time, reason, special_instructions, status, assigned_substitute_id, created_at, updated_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
+        (
+            &req2_id,
+            &class2_id,
+            &manager_id,
+            &next_week.format("%Y-%m-%d").to_string(),
+            "09:00",
+            "14:30",
+            "Professional Development",
+            "Science lab safety rules posted on wall. No experiments scheduled for today.",
+            "filled",
+            &sub_id,
+            &Utc::now().to_rfc3339(),
+            &Utc::now().to_rfc3339(),
+        ),
+    ).map_err(|e| e.to_string())?;
+    
+    let req3_id = Uuid::new_v4().to_string();
+    let yesterday = chrono::Utc::now() - chrono::Duration::days(1);
+    conn.execute(
+        "INSERT INTO substitute_requests (id, class_id, requested_by, date_needed, start_time, end_time, reason, status, created_at, updated_at)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
+        (
+            &req3_id,
+            &class1_id,
+            &admin_id,
+            &yesterday.format("%Y-%m-%d").to_string(),
+            "08:00",
+            "12:00",
+            "Emergency",
+            "cancelled",
+            &Utc::now().to_rfc3339(),
+            &Utc::now().to_rfc3339(),
+        ),
+    ).map_err(|e| e.to_string())?;
+    
     Ok("Database seeded successfully with demo data".to_string())
 }

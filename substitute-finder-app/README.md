@@ -9,22 +9,24 @@ A cross-platform desktop application built with Tauri, React, and TypeScript to 
 - **Class Management**: Complete CRUD interface with organization filtering, subject/grade selection
 - **User Authentication**: Secure login system with role-based access (admin, org_manager, substitute)
 - **User Management**: Full user interface with role-based permissions and organization assignment
+- **Substitute Request Workflow**: Complete request creation, management, and status tracking
+- **Dashboard & Analytics**: Real-time metrics, upcoming requests, and system overview
 - **Admin Panel**: Professional interface with header, sidebar navigation, and responsive design
 - **Database**: SQLite with comprehensive schema and demo data seeding
 - **Backend API**: Full CRUD operations via Rust Tauri commands with authentication
 
 ### 🚧 **In Development**
-- Substitute request workflow and assignment system
-- Desktop notifications
-- Request response handling
-- Reporting and analytics dashboard
+- Desktop notifications for real-time alerts
+- Advanced reporting and analytics
+- Substitute availability matching
+- Email/SMS notification integration
 
 ### 📋 **Planned Features**
 - Multi-teacher class assignments
-- Substitute availability matching
-- Request history and fill rates
-- Export functionality (CSV/Excel)
-- Email/SMS notifications (future)
+- Substitute response system (accept/decline requests)
+- Advanced availability matching algorithms
+- Automated request assignment
+- Export functionality (CSV/Excel reports)
 - Mobile app (via Tauri Mobile when available)
 
 ## Tech Stack
@@ -103,9 +105,11 @@ src/
 │   ├── ui/              # Base UI components (Button, Input, Card, etc.)
 │   ├── layout/          # Layout components (Sidebar, Header)
 │   ├── auth/            # Authentication components (LoginForm)
+│   ├── dashboard/       # Dashboard and analytics components
 │   ├── organizations/   # Organization management components
 │   ├── classes/         # Class management components
-│   └── users/           # User management components
+│   ├── users/           # User management components
+│   └── requests/        # Substitute request management components
 ├── contexts/
 │   └── AuthContext.tsx # Authentication state management
 ├── lib/
@@ -136,8 +140,9 @@ The application uses SQLite with the following main entities:
 
 - **Organizations**: Hierarchical structure with parent-child relationships
 - **Users**: Role-based (admin, org_manager, substitute) with organization association
-- **Classes**: Belong to organizations with multiple teacher assignments
-- **Substitute Requests**: Date/time-based requests with status tracking
+- **Classes**: Belong to organizations with subject, grade level, and room information
+- **Substitute Requests**: Complete workflow with date/time, reason, instructions, and status tracking
+- **Request Responses**: Substitute teacher responses to requests (accept/decline)
 - **Notifications**: Log of all notifications sent to users
 
 ## Contributing
@@ -180,21 +185,25 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [x] User management interface with organization assignment
 - [x] Database seeding with demo data
 
-### Phase 3: Substitute Workflow 📋
-- [ ] Substitute request creation
-- [ ] Availability matching
-- [ ] Response handling
+### Phase 3: Substitute Workflow ✅
+- [x] Substitute request creation with comprehensive form
+- [x] Request management interface with status tracking
+- [x] Dashboard with metrics and upcoming requests overview
+- [x] Status management (open, filled, cancelled)
+- [x] Role-based request access and permissions
 
 ### Phase 4: Advanced Features 📋
-- [ ] Desktop notifications
-- [ ] Reporting dashboard
-- [ ] Export functionality
-- [ ] Settings management
+- [ ] Desktop notifications for real-time alerts
+- [ ] Substitute response system (accept/decline requests)
+- [ ] Advanced analytics and reporting dashboard
+- [ ] Export functionality (CSV/Excel reports)
+- [ ] Settings management and configuration
 
 ### Phase 5: Enhancements 📋
-- [ ] Email/SMS integration
-- [ ] Mobile app (Tauri Mobile)
-- [ ] Cloud backup options
+- [ ] Email/SMS notification integration
+- [ ] Automated substitute matching algorithms
+- [ ] Mobile app (Tauri Mobile when available)
+- [ ] Cloud backup and synchronization options
 
 ## Support
 
