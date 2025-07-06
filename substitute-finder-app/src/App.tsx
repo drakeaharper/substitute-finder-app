@@ -7,9 +7,11 @@ import { UserList } from "./components/users/UserList";
 import { RequestList } from "./components/requests/RequestList";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import { AnalyticsDashboard } from "./components/dashboard/AnalyticsDashboard";
+import { SettingsPage } from "./components/settings/SettingsPage";
 import { LoginForm } from "./components/auth/LoginForm";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import { useToast } from "./components/notifications/NotificationToast";
 
 function AppContent() {
@@ -44,12 +46,7 @@ function AppContent() {
       case "requests":
         return <RequestList />;
       case "settings":
-        return (
-          <div className="p-6">
-            <h2 className="text-3xl font-bold mb-4">Settings</h2>
-            <p className="text-muted-foreground">Application settings coming soon...</p>
-          </div>
-        );
+        return <SettingsPage />;
       default:
         return <OrganizationList />;
     }
@@ -72,9 +69,11 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <NotificationProvider>
-        <AppContent />
-      </NotificationProvider>
+      <SettingsProvider>
+        <NotificationProvider>
+          <AppContent />
+        </NotificationProvider>
+      </SettingsProvider>
     </AuthProvider>
   );
 }
