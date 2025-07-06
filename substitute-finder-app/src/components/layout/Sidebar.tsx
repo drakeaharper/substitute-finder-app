@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building, Users, GraduationCap, CalendarDays, Settings } from 'lucide-react';
+import { Building, Users, GraduationCap, CalendarDays, Settings, BarChart3 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface SidebarProps {
@@ -12,6 +12,11 @@ const navigationItems = [
     id: 'dashboard',
     label: 'Dashboard',
     icon: CalendarDays,
+  },
+  {
+    id: 'analytics',
+    label: 'Analytics & Reports',
+    icon: BarChart3,
   },
   {
     id: 'organizations',

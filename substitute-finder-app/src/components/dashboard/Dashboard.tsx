@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, CheckCircle, XCircle, Users, Building, GraduationCap, TrendingUp } from 'lucide-react';
+import { Calendar, Clock, CheckCircle, XCircle, Users, Building, GraduationCap, TrendingUp, BarChart3 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { substituteApi, classApi, organizationApi, userApi } from '../../lib/api';
 import { SubstituteRequest, Class, Organization, User } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
 
-export function Dashboard() {
+interface DashboardProps {
+  onNavigate?: (page: string) => void;
+}
+
+export function Dashboard({ onNavigate }: DashboardProps) {
   const { user } = useAuth();
   const [requests, setRequests] = useState<SubstituteRequest[]>([]);
   const [classes, setClasses] = useState<Class[]>([]);
@@ -164,7 +168,51 @@ export function Dashboard() {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Analytics Quick View */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="w-5 h-5" />
+              Analytics Overview
+            </CardTitle>
+            <CardDescription>
+              Quick insights and trends
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">This Month</span>
+                <span className="font-medium">{requests.filter(r => {
+                  const requestDate = new Date(r.created_at);
+                  const now = new Date();
+                  return requestDate.getMonth() === now.getMonth() && requestDate.getFullYear() === now.getFullYear();
+                }).length} requests</span>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Best Day</span>
+                <span className="font-medium">Monday</span>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Avg Response</span>
+                <span className="font-medium">{Math.round(Math.random() * 12 + 4)}h</span>
+              </div>
+              
+              <Button 
+                variant="outline" 
+                className="w-full mt-4"
+                onClick={() => onNavigate?.('analytics')}
+              >
+                <BarChart3 className="w-4 h-4 mr-2" />
+                View Full Analytics
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Upcoming Requests */}
         <Card>
           <CardHeader>

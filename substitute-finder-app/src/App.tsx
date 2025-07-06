@@ -6,6 +6,7 @@ import { ClassList } from "./components/classes/ClassList";
 import { UserList } from "./components/users/UserList";
 import { RequestList } from "./components/requests/RequestList";
 import { Dashboard } from "./components/dashboard/Dashboard";
+import { AnalyticsDashboard } from "./components/dashboard/AnalyticsDashboard";
 import { LoginForm } from "./components/auth/LoginForm";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
@@ -33,7 +34,9 @@ function AppContent() {
       case "organizations":
         return <OrganizationList />;
       case "dashboard":
-        return <Dashboard />;
+        return <Dashboard onNavigate={setCurrentPage} />;
+      case "analytics":
+        return <AnalyticsDashboard />;
       case "classes":
         return <ClassList />;
       case "users":
