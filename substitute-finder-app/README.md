@@ -6,16 +6,18 @@ A cross-platform desktop application built with Tauri, React, and TypeScript to 
 
 ### ✅ **Currently Implemented**
 - **Organization Management**: Create and manage hierarchical organizations (parent-child relationships)
-- **Admin Panel**: Professional interface with sidebar navigation and responsive design
-- **Database**: SQLite with comprehensive schema for organizations, classes, users, and substitute requests
-- **Backend API**: Full CRUD operations via Rust Tauri commands
+- **Class Management**: Complete CRUD interface with organization filtering, subject/grade selection
+- **User Authentication**: Secure login system with role-based access (admin, org_manager, substitute)
+- **User Management**: Full user interface with role-based permissions and organization assignment
+- **Admin Panel**: Professional interface with header, sidebar navigation, and responsive design
+- **Database**: SQLite with comprehensive schema and demo data seeding
+- **Backend API**: Full CRUD operations via Rust Tauri commands with authentication
 
 ### 🚧 **In Development**
-- Class management with teacher assignments
-- User authentication and role-based access
-- Substitute request workflow
+- Substitute request workflow and assignment system
 - Desktop notifications
-- Reporting and analytics
+- Request response handling
+- Reporting and analytics dashboard
 
 ### 📋 **Planned Features**
 - Multi-teacher class assignments
@@ -81,6 +83,10 @@ A cross-platform desktop application built with Tauri, React, and TypeScript to 
    bun run tauri dev
    ```
 
+4. First-time setup:
+   - Click "Seed Database with Demo Data" on the login screen
+   - Login with demo credentials: `admin` / `admin`
+
 ### Building for Production
 
 ```bash
@@ -94,9 +100,14 @@ bun run tauri build
 ```
 src/
 ├── components/
-│   ├── ui/              # Base UI components
-│   ├── layout/          # Layout components
-│   └── organizations/   # Feature-specific components
+│   ├── ui/              # Base UI components (Button, Input, Card, etc.)
+│   ├── layout/          # Layout components (Sidebar, Header)
+│   ├── auth/            # Authentication components (LoginForm)
+│   ├── organizations/   # Organization management components
+│   ├── classes/         # Class management components
+│   └── users/           # User management components
+├── contexts/
+│   └── AuthContext.tsx # Authentication state management
 ├── lib/
 │   ├── api.ts          # Tauri API calls
 │   └── utils.ts        # Utility functions
@@ -105,8 +116,8 @@ src/
 
 src-tauri/
 ├── src/
-│   ├── commands/       # Tauri command handlers
-│   ├── database/       # Database models and schema
+│   ├── commands/       # Tauri command handlers (organization, class, user, auth, seed)
+│   ├── database/       # Database models, schema, and connection management
 │   └── lib.rs         # Main Tauri application
 ├── Cargo.toml         # Rust dependencies
 └── tauri.conf.json    # Tauri configuration
@@ -162,10 +173,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [x] Database schema and backend API
 - [x] Admin panel and organization management
 
-### Phase 2: Class & User Management 🚧
-- [ ] Class management interface
-- [ ] User authentication system
-- [ ] Role-based permissions
+### Phase 2: Class & User Management ✅
+- [x] Class management interface with filtering and metadata
+- [x] User authentication system with persistent sessions
+- [x] Role-based permissions and access control
+- [x] User management interface with organization assignment
+- [x] Database seeding with demo data
 
 ### Phase 3: Substitute Workflow 📋
 - [ ] Substitute request creation

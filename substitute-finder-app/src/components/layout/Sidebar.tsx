@@ -42,13 +42,8 @@ const navigationItems = [
 
 export function Sidebar({ currentPage, onPageChange }: SidebarProps) {
   return (
-    <div className="w-64 bg-card border-r border-border h-screen">
-      <div className="p-6">
-        <h1 className="text-2xl font-bold text-foreground">Substitute Finder</h1>
-        <p className="text-sm text-muted-foreground">Admin Panel</p>
-      </div>
-      
-      <nav className="px-4 space-y-2">
+    <div className="w-64 bg-card border-r border-border h-full">      
+      <nav className="p-4 space-y-2">
         {navigationItems.map((item) => {
           const Icon = item.icon;
           return (

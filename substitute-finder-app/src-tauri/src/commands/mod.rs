@@ -3,6 +3,7 @@ pub mod user;
 pub mod class;
 pub mod substitute;
 pub mod auth;
+pub mod seed;
 
 use crate::database::connection::DatabaseManager;
 use std::sync::Arc;

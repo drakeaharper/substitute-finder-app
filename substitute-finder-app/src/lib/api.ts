@@ -81,3 +81,9 @@ export const substituteApi = {
   delete: (id: string): Promise<void> =>
     invoke('delete_substitute_request', { id }),
 };
+
+// Seed API
+export const seedApi = {
+  seedDatabase: (): Promise<string> =>
+    invoke('seed_database'),
+};

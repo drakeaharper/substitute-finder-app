@@ -44,6 +44,8 @@ pub fn run() {
             commands::substitute::get_substitute_request_by_id,
             commands::substitute::update_substitute_request_status,
             commands::substitute::delete_substitute_request,
+            // Seed command
+            commands::seed::seed_database,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
