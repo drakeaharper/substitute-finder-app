@@ -1,6 +1,6 @@
 # Substitute Finder App
 
-A web application for finding substitute ingredients and recipes.
+A web application for finding substitute teachers for classes.
 
 ## Getting Started
 
