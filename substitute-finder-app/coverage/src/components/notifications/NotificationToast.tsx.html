@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/128</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/128</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
@@ -236,10 +236,7 @@
 <a name='L171'></a><a href='#L171'>171</a>
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -264,6 +261,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -322,13 +325,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -363,10 +360,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -415,78 +408,85 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useEffect, useState } from 'react';<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';</span>
-<span class="cstat-no" title="statement not covered" >import { Button } from '../ui/button';</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { useEffect, useState } from 'react'<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react'</span>
+<span class="cstat-no" title="statement not covered" >import { Button } from '../ui/button'</span>
 &nbsp;
 interface ToastNotification {
-  id: string;
-  title: string;
-  message: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  duration?: number;
+  id: string
+  title: string
+  message: string
+  type: 'success' | 'error' | 'warning' | 'info'
+  duration?: number
   actions?: Array&lt;{
-    label: string;
-    action: () =&gt; void;
-    variant?: 'default' | 'destructive';
-  }&gt;;
+    label: string
+    action: () =&gt; void
+    variant?: 'default' | 'destructive'
+  }&gt;
 }
 &nbsp;
 interface NotificationToastProps {
-  notifications: ToastNotification[];
-  onRemove: (id: string) =&gt; void;
+  notifications: ToastNotification[]
+  onRemove: (id: string) =&gt; void
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >function Toast({ notification, onRemove }: { notification: ToastNotification; onRemove: (id: string) =&gt; void }) {</span>
-<span class="cstat-no" title="statement not covered" >  const [isVisible, setIsVisible] = useState(false);</span>
-<span class="cstat-no" title="statement not covered" >  const [isLeaving, setIsLeaving] = useState(false);</span>
+<span class="cstat-no" title="statement not covered" >function Toast({</span>
+<span class="cstat-no" title="statement not covered" >  notification,</span>
+<span class="cstat-no" title="statement not covered" >  onRemove,</span>
+<span class="cstat-no" title="statement not covered" >}: {</span>
+  notification: ToastNotification
+  onRemove: (id: string) =&gt; void
+<span class="cstat-no" title="statement not covered" >}) {</span>
+<span class="cstat-no" title="statement not covered" >  const [isVisible, setIsVisible] = useState(false)</span>
+<span class="cstat-no" title="statement not covered" >  const [isLeaving, setIsLeaving] = useState(false)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
     // Animate in
-<span class="cstat-no" title="statement not covered" >    setTimeout(() =&gt; setIsVisible(true), 50);</span>
+<span class="cstat-no" title="statement not covered" >    setTimeout(() =&gt; setIsVisible(true), 50)</span>
 &nbsp;
     // Auto remove after duration
 <span class="cstat-no" title="statement not covered" >    if (notification.duration !== 0) {</span>
 <span class="cstat-no" title="statement not covered" >      const timer = setTimeout(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        handleRemove();</span>
-<span class="cstat-no" title="statement not covered" >      }, notification.duration || 5000);</span>
+<span class="cstat-no" title="statement not covered" >        handleRemove()</span>
+<span class="cstat-no" title="statement not covered" >      }, notification.duration || 5000)</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return () =&gt; clearTimeout(timer);</span>
+<span class="cstat-no" title="statement not covered" >      return () =&gt; clearTimeout(timer)</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  }, [notification.duration]);</span>
+<span class="cstat-no" title="statement not covered" >  }, [notification.duration])</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const handleRemove = () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setIsLeaving(true);</span>
+<span class="cstat-no" title="statement not covered" >    setIsLeaving(true)</span>
 <span class="cstat-no" title="statement not covered" >    setTimeout(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      onRemove(notification.id);</span>
-<span class="cstat-no" title="statement not covered" >    }, 300);</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >      onRemove(notification.id)</span>
+<span class="cstat-no" title="statement not covered" >    }, 300)</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const getIcon = () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    switch (notification.type) {</span>
 <span class="cstat-no" title="statement not covered" >      case 'success':</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;CheckCircle className="w-5 h-5 text-green-500" /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;CheckCircle className="w-5 h-5 text-green-500" /&gt;</span>
 <span class="cstat-no" title="statement not covered" >      case 'error':</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;AlertCircle className="w-5 h-5 text-red-500" /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;AlertCircle className="w-5 h-5 text-red-500" /&gt;</span>
 <span class="cstat-no" title="statement not covered" >      case 'warning':</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;AlertTriangle className="w-5 h-5 text-orange-500" /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;AlertTriangle className="w-5 h-5 text-orange-500" /&gt;</span>
 <span class="cstat-no" title="statement not covered" >      default:</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;Info className="w-5 h-5 text-blue-500" /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;Info className="w-5 h-5 text-blue-500" /&gt;</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const getBorderColor = () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    switch (notification.type) {</span>
 <span class="cstat-no" title="statement not covered" >      case 'success':</span>
-<span class="cstat-no" title="statement not covered" >        return 'border-l-green-500';</span>
+<span class="cstat-no" title="statement not covered" >        return 'border-l-green-500'</span>
 <span class="cstat-no" title="statement not covered" >      case 'error':</span>
-<span class="cstat-no" title="statement not covered" >        return 'border-l-red-500';</span>
+<span class="cstat-no" title="statement not covered" >        return 'border-l-red-500'</span>
 <span class="cstat-no" title="statement not covered" >      case 'warning':</span>
-<span class="cstat-no" title="statement not covered" >        return 'border-l-orange-500';</span>
+<span class="cstat-no" title="statement not covered" >        return 'border-l-orange-500'</span>
 <span class="cstat-no" title="statement not covered" >      default:</span>
-<span class="cstat-no" title="statement not covered" >        return 'border-l-blue-500';</span>
+<span class="cstat-no" title="statement not covered" >        return 'border-l-blue-500'</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
 <span class="cstat-no" title="statement not covered" >    &lt;div</span>
@@ -497,18 +497,12 @@ interface NotificationToastProps {
       `}
     &gt;
 <span class="cstat-no" title="statement not covered" >      &lt;div className="flex items-start gap-3"&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;div className="mt-0.5"&gt;</span>
-<span class="cstat-no" title="statement not covered" >          {getIcon()}</span>
-<span class="cstat-no" title="statement not covered" >        &lt;/div&gt;</span>
-        
+<span class="cstat-no" title="statement not covered" >        &lt;div className="mt-0.5"&gt;{getIcon()}&lt;/div&gt;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        &lt;div className="flex-1 min-w-0"&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;h4 className="font-medium text-sm text-foreground"&gt;</span>
-<span class="cstat-no" title="statement not covered" >            {notification.title}</span>
-<span class="cstat-no" title="statement not covered" >          &lt;/h4&gt;</span>
-<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mt-1"&gt;</span>
-<span class="cstat-no" title="statement not covered" >            {notification.message}</span>
-<span class="cstat-no" title="statement not covered" >          &lt;/p&gt;</span>
-          
+<span class="cstat-no" title="statement not covered" >          &lt;h4 className="font-medium text-sm text-foreground"&gt;{notification.title}&lt;/h4&gt;</span>
+<span class="cstat-no" title="statement not covered" >          &lt;p className="text-sm text-muted-foreground mt-1"&gt;{notification.message}&lt;/p&gt;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >          {notification.actions &amp;&amp; notification.actions.length &gt; 0 &amp;&amp; (</span>
 <span class="cstat-no" title="statement not covered" >            &lt;div className="flex gap-2 mt-3"&gt;</span>
 <span class="cstat-no" title="statement not covered" >              {notification.actions.map((action, index) =&gt; (</span>
@@ -525,7 +519,7 @@ interface NotificationToastProps {
 <span class="cstat-no" title="statement not covered" >            &lt;/div&gt;</span>
           )}
 <span class="cstat-no" title="statement not covered" >        &lt;/div&gt;</span>
-        
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        &lt;Button</span>
 <span class="cstat-no" title="statement not covered" >          variant="ghost"</span>
 <span class="cstat-no" title="statement not covered" >          size="sm"</span>
@@ -536,51 +530,47 @@ interface NotificationToastProps {
 <span class="cstat-no" title="statement not covered" >        &lt;/Button&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
-  );
+  )
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function NotificationToast({ notifications, onRemove }: NotificationToastProps) {</span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
 <span class="cstat-no" title="statement not covered" >    &lt;div className="fixed bottom-4 right-4 z-50 space-y-2"&gt;</span>
 <span class="cstat-no" title="statement not covered" >      {notifications.map((notification) =&gt; (</span>
-<span class="cstat-no" title="statement not covered" >        &lt;Toast</span>
-<span class="cstat-no" title="statement not covered" >          key={notification.id}</span>
-<span class="cstat-no" title="statement not covered" >          notification={notification}</span>
-<span class="cstat-no" title="statement not covered" >          onRemove={onRemove}</span>
-<span class="cstat-no" title="statement not covered" >        /&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;Toast key={notification.id} notification={notification} onRemove={onRemove} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >      ))}</span>
 <span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
-  );
+  )
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 // Hook for easy toast notifications
 <span class="cstat-no" title="statement not covered" >export function useToast() {</span>
-<span class="cstat-no" title="statement not covered" >  const [toasts, setToasts] = useState&lt;ToastNotification[]&gt;([]);</span>
+<span class="cstat-no" title="statement not covered" >  const [toasts, setToasts] = useState&lt;ToastNotification[]&gt;([])</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const addToast = (toast: Omit&lt;ToastNotification, 'id'&gt;) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    const id = Date.now().toString() + Math.random().toString(36).substr(2, 9);</span>
-<span class="cstat-no" title="statement not covered" >    setToasts(prev =&gt; [...prev, { ...toast, id }]);</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    const id = Date.now().toString() + Math.random().toString(36).substr(2, 9)</span>
+<span class="cstat-no" title="statement not covered" >    setToasts((prev) =&gt; [...prev, { ...toast, id }])</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const removeToast = (id: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setToasts(prev =&gt; prev.filter(toast =&gt; toast.id !== id));</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    setToasts((prev) =&gt; prev.filter((toast) =&gt; toast.id !== id))</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const success = (title: string, message: string, actions?: ToastNotification['actions']) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    addToast({ title, message, type: 'success', actions });</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    addToast({ title, message, type: 'success', actions })</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const error = (title: string, message: string, actions?: ToastNotification['actions']) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    addToast({ title, message, type: 'error', actions });</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    addToast({ title, message, type: 'error', actions })</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const warning = (title: string, message: string, actions?: ToastNotification['actions']) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    addToast({ title, message, type: 'warning', actions });</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    addToast({ title, message, type: 'warning', actions })</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const info = (title: string, message: string, actions?: ToastNotification['actions']) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    addToast({ title, message, type: 'info', actions });</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    addToast({ title, message, type: 'info', actions })</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
 <span class="cstat-no" title="statement not covered" >    toasts,</span>
@@ -589,16 +579,17 @@ interface NotificationToastProps {
 <span class="cstat-no" title="statement not covered" >    error,</span>
 <span class="cstat-no" title="statement not covered" >    warning,</span>
 <span class="cstat-no" title="statement not covered" >    info,</span>
-<span class="cstat-no" title="statement not covered" >    ToastContainer: () =&gt; &lt;NotificationToast notifications={toasts} onRemove={removeToast} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
-<span class="cstat-no" title="statement not covered" >}</span></pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >    ToastContainer: () =&gt; &lt;NotificationToast notifications={toasts} onRemove={removeToast} /&gt;,</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-06T23:38:03.083Z
+                at 2025-07-07T00:22:08.692Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

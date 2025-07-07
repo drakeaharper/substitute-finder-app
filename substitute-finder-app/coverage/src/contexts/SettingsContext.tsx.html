@@ -235,7 +235,8 @@
 <a name='L170'></a><a href='#L170'>170</a>
 <a name='L171'></a><a href='#L171'>171</a>
 <a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -407,47 +408,48 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react'<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
 &nbsp;
 interface AppSettings {
   notifications: {
-    desktop: boolean;
-    inApp: boolean;
-    requestCreated: boolean;
-    requestFilled: boolean;
-    requestCancelled: boolean;
-    autoMarkRead: boolean;
-    soundEnabled: boolean;
-  };
-  
+    desktop: boolean
+    inApp: boolean
+    requestCreated: boolean
+    requestFilled: boolean
+    requestCancelled: boolean
+    autoMarkRead: boolean
+    soundEnabled: boolean
+  }
+&nbsp;
   system: {
-    autoRefreshInterval: number;
-    defaultTimeRange: '30d' | '90d' | '1y';
-    timezone: string;
-    dateFormat: 'MM/dd/yyyy' | 'dd/MM/yyyy' | 'yyyy-MM-dd';
-    timeFormat: '12h' | '24h';
-  };
-  
+    autoRefreshInterval: number
+    defaultTimeRange: '30d' | '90d' | '1y'
+    timezone: string
+    dateFormat: 'MM/dd/yyyy' | 'dd/MM/yyyy' | 'yyyy-MM-dd'
+    timeFormat: '12h' | '24h'
+  }
+&nbsp;
   export: {
-    defaultFormat: 'csv' | 'excel';
-    includeTimestamps: boolean;
-    includeSummary: boolean;
-    maxRows: number;
-  };
-  
+    defaultFormat: 'csv' | 'excel'
+    includeTimestamps: boolean
+    includeSummary: boolean
+    maxRows: number
+  }
+&nbsp;
   ui: {
-    theme: 'light' | 'dark' | 'system';
-    compactMode: boolean;
-    showHelpTips: boolean;
-    defaultPage: string;
-  };
-  
+    theme: 'light' | 'dark' | 'system'
+    compactMode: boolean
+    showHelpTips: boolean
+    defaultPage: string
+  }
+&nbsp;
   security: {
-    sessionTimeout: number;
-    requirePasswordChange: boolean;
-    passwordChangeInterval: number;
-    enableAuditLog: boolean;
-  };
+    sessionTimeout: number
+    requirePasswordChange: boolean
+    passwordChangeInterval: number
+    enableAuditLog: boolean
+  }
 }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >const defaultSettings: AppSettings = {</span>
@@ -485,84 +487,84 @@ interface AppSettings {
 <span class="cstat-no" title="statement not covered" >    passwordChangeInterval: 90,</span>
 <span class="cstat-no" title="statement not covered" >    enableAuditLog: true,</span>
 <span class="cstat-no" title="statement not covered" >  },</span>
-<span class="cstat-no" title="statement not covered" >};</span>
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 interface SettingsContextType {
-  settings: AppSettings;
-  updateSettings: (newSettings: Partial&lt;AppSettings&gt;) =&gt; void;
-  updateSetting: (section: keyof AppSettings, key: string, value: any) =&gt; void;
-  resetSettings: () =&gt; void;
-  saveSettings: () =&gt; Promise&lt;void&gt;;
-  loadSettings: () =&gt; Promise&lt;void&gt;;
-  isLoading: boolean;
+  settings: AppSettings
+  updateSettings: (newSettings: Partial&lt;AppSettings&gt;) =&gt; void
+  updateSetting: (section: keyof AppSettings, key: string, value: any) =&gt; void
+  resetSettings: () =&gt; void
+  saveSettings: () =&gt; Promise&lt;void&gt;
+  loadSettings: () =&gt; Promise&lt;void&gt;
+  isLoading: boolean
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >const SettingsContext = createContext&lt;SettingsContextType | null&gt;(null);</span>
+<span class="cstat-no" title="statement not covered" >const SettingsContext = createContext&lt;SettingsContextType | null&gt;(null)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function useSettings() {</span>
-<span class="cstat-no" title="statement not covered" >  const context = useContext(SettingsContext);</span>
+<span class="cstat-no" title="statement not covered" >  const context = useContext(SettingsContext)</span>
 <span class="cstat-no" title="statement not covered" >  if (!context) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new Error('useSettings must be used within a SettingsProvider');</span>
+<span class="cstat-no" title="statement not covered" >    throw new Error('useSettings must be used within a SettingsProvider')</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
-<span class="cstat-no" title="statement not covered" >  return context;</span>
+<span class="cstat-no" title="statement not covered" >  return context</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 interface SettingsProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function SettingsProvider({ children }: SettingsProviderProps) {</span>
-<span class="cstat-no" title="statement not covered" >  const [settings, setSettings] = useState&lt;AppSettings&gt;(defaultSettings);</span>
-<span class="cstat-no" title="statement not covered" >  const [isLoading, setIsLoading] = useState(false);</span>
+<span class="cstat-no" title="statement not covered" >  const [settings, setSettings] = useState&lt;AppSettings&gt;(defaultSettings)</span>
+<span class="cstat-no" title="statement not covered" >  const [isLoading, setIsLoading] = useState(false)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    loadSettings();</span>
-<span class="cstat-no" title="statement not covered" >  }, []);</span>
+<span class="cstat-no" title="statement not covered" >    loadSettings()</span>
+<span class="cstat-no" title="statement not covered" >  }, [])</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const loadSettings = async (): Promise&lt;void&gt; =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      setIsLoading(true);</span>
-<span class="cstat-no" title="statement not covered" >      const savedSettings = localStorage.getItem('app-settings');</span>
+<span class="cstat-no" title="statement not covered" >      setIsLoading(true)</span>
+<span class="cstat-no" title="statement not covered" >      const savedSettings = localStorage.getItem('app-settings')</span>
 <span class="cstat-no" title="statement not covered" >      if (savedSettings) {</span>
-<span class="cstat-no" title="statement not covered" >        const parsed = JSON.parse(savedSettings);</span>
-<span class="cstat-no" title="statement not covered" >        setSettings({ ...defaultSettings, ...parsed });</span>
+<span class="cstat-no" title="statement not covered" >        const parsed = JSON.parse(savedSettings)</span>
+<span class="cstat-no" title="statement not covered" >        setSettings({ ...defaultSettings, ...parsed })</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
 <span class="cstat-no" title="statement not covered" >    } catch (error) {</span>
-<span class="cstat-no" title="statement not covered" >      console.error('Failed to load settings:', error);</span>
+<span class="cstat-no" title="statement not covered" >      console.error('Failed to load settings:', error)</span>
 <span class="cstat-no" title="statement not covered" >    } finally {</span>
-<span class="cstat-no" title="statement not covered" >      setIsLoading(false);</span>
+<span class="cstat-no" title="statement not covered" >      setIsLoading(false)</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const saveSettings = async (): Promise&lt;void&gt; =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      setIsLoading(true);</span>
-<span class="cstat-no" title="statement not covered" >      localStorage.setItem('app-settings', JSON.stringify(settings));</span>
+<span class="cstat-no" title="statement not covered" >      setIsLoading(true)</span>
+<span class="cstat-no" title="statement not covered" >      localStorage.setItem('app-settings', JSON.stringify(settings))</span>
 <span class="cstat-no" title="statement not covered" >    } catch (error) {</span>
-<span class="cstat-no" title="statement not covered" >      console.error('Failed to save settings:', error);</span>
-<span class="cstat-no" title="statement not covered" >      throw error;</span>
+<span class="cstat-no" title="statement not covered" >      console.error('Failed to save settings:', error)</span>
+<span class="cstat-no" title="statement not covered" >      throw error</span>
 <span class="cstat-no" title="statement not covered" >    } finally {</span>
-<span class="cstat-no" title="statement not covered" >      setIsLoading(false);</span>
+<span class="cstat-no" title="statement not covered" >      setIsLoading(false)</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const updateSettings = (newSettings: Partial&lt;AppSettings&gt;) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSettings(prev =&gt; ({ ...prev, ...newSettings }));</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    setSettings((prev) =&gt; ({ ...prev, ...newSettings }))</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const updateSetting = (section: keyof AppSettings, key: string, value: any) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSettings(prev =&gt; ({</span>
+<span class="cstat-no" title="statement not covered" >    setSettings((prev) =&gt; ({</span>
 <span class="cstat-no" title="statement not covered" >      ...prev,</span>
 <span class="cstat-no" title="statement not covered" >      [section]: {</span>
 <span class="cstat-no" title="statement not covered" >        ...prev[section],</span>
-<span class="cstat-no" title="statement not covered" >        [key]: value</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
-<span class="cstat-no" title="statement not covered" >    }));</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >        [key]: value,</span>
+<span class="cstat-no" title="statement not covered" >      },</span>
+<span class="cstat-no" title="statement not covered" >    }))</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const resetSettings = () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSettings(defaultSettings);</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >    setSettings(defaultSettings)</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
 <span class="cstat-no" title="statement not covered" >    &lt;SettingsContext.Provider</span>
@@ -578,15 +580,16 @@ interface SettingsProviderProps {
     &gt;
 <span class="cstat-no" title="statement not covered" >      {children}</span>
 <span class="cstat-no" title="statement not covered" >    &lt;/SettingsContext.Provider&gt;</span>
-  );
-<span class="cstat-no" title="statement not covered" >}</span></pre></td></tr></table></pre>
+  )
+<span class="cstat-no" title="statement not covered" >}</span>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-06T23:38:03.083Z
+                at 2025-07-07T00:22:08.692Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

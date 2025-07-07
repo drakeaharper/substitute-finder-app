@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -142,9 +142,7 @@
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -207,8 +205,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,72 +221,70 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { useState } from "react";<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
-<span class="cstat-no" title="statement not covered" >import { Sidebar } from "./components/layout/Sidebar";</span>
-<span class="cstat-no" title="statement not covered" >import { Header } from "./components/layout/Header";</span>
-<span class="cstat-no" title="statement not covered" >import { OrganizationList } from "./components/organizations/OrganizationList";</span>
-<span class="cstat-no" title="statement not covered" >import { ClassList } from "./components/classes/ClassList";</span>
-<span class="cstat-no" title="statement not covered" >import { UserList } from "./components/users/UserList";</span>
-<span class="cstat-no" title="statement not covered" >import { RequestList } from "./components/requests/RequestList";</span>
-<span class="cstat-no" title="statement not covered" >import { Dashboard } from "./components/dashboard/Dashboard";</span>
-<span class="cstat-no" title="statement not covered" >import { AnalyticsDashboard } from "./components/dashboard/AnalyticsDashboard";</span>
-<span class="cstat-no" title="statement not covered" >import { SettingsPage } from "./components/settings/SettingsPage";</span>
-<span class="cstat-no" title="statement not covered" >import { LoginForm } from "./components/auth/LoginForm";</span>
-<span class="cstat-no" title="statement not covered" >import { AuthProvider, useAuth } from "./contexts/AuthContext";</span>
-<span class="cstat-no" title="statement not covered" >import { NotificationProvider } from "./contexts/NotificationContext";</span>
-<span class="cstat-no" title="statement not covered" >import { SettingsProvider } from "./contexts/SettingsContext";</span>
-<span class="cstat-no" title="statement not covered" >import { useToast } from "./components/notifications/NotificationToast";</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { useState } from 'react'<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
+<span class="cstat-no" title="statement not covered" >import { Sidebar } from './components/layout/Sidebar'</span>
+<span class="cstat-no" title="statement not covered" >import { Header } from './components/layout/Header'</span>
+<span class="cstat-no" title="statement not covered" >import { OrganizationList } from './components/organizations/OrganizationList'</span>
+<span class="cstat-no" title="statement not covered" >import { ClassList } from './components/classes/ClassList'</span>
+<span class="cstat-no" title="statement not covered" >import { UserList } from './components/users/UserList'</span>
+<span class="cstat-no" title="statement not covered" >import { RequestList } from './components/requests/RequestList'</span>
+<span class="cstat-no" title="statement not covered" >import { Dashboard } from './components/dashboard/Dashboard'</span>
+<span class="cstat-no" title="statement not covered" >import { AnalyticsDashboard } from './components/dashboard/AnalyticsDashboard'</span>
+<span class="cstat-no" title="statement not covered" >import { SettingsPage } from './components/settings/SettingsPage'</span>
+<span class="cstat-no" title="statement not covered" >import { LoginForm } from './components/auth/LoginForm'</span>
+<span class="cstat-no" title="statement not covered" >import { AuthProvider, useAuth } from './contexts/AuthContext'</span>
+<span class="cstat-no" title="statement not covered" >import { NotificationProvider } from './contexts/NotificationContext'</span>
+<span class="cstat-no" title="statement not covered" >import { SettingsProvider } from './contexts/SettingsContext'</span>
+<span class="cstat-no" title="statement not covered" >import { useToast } from './components/notifications/NotificationToast'</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >function AppContent() {</span>
-<span class="cstat-no" title="statement not covered" >  const { user, login, isLoading } = useAuth();</span>
-<span class="cstat-no" title="statement not covered" >  const [currentPage, setCurrentPage] = useState("dashboard");</span>
-<span class="cstat-no" title="statement not covered" >  const { ToastContainer } = useToast();</span>
+<span class="cstat-no" title="statement not covered" >  const { user, login, isLoading } = useAuth()</span>
+<span class="cstat-no" title="statement not covered" >  const [currentPage, setCurrentPage] = useState('dashboard')</span>
+<span class="cstat-no" title="statement not covered" >  const { ToastContainer } = useToast()</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (isLoading) {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
 <span class="cstat-no" title="statement not covered" >      &lt;div className="flex items-center justify-center min-h-screen"&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;div className="text-muted-foreground"&gt;Loading...&lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;/div&gt;</span>
-    );
+    )
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!user) {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;LoginForm onLogin={login} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;LoginForm onLogin={login} /&gt;</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const renderCurrentPage = () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    switch (currentPage) {</span>
-<span class="cstat-no" title="statement not covered" >      case "organizations":</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;OrganizationList /&gt;;</span>
-<span class="cstat-no" title="statement not covered" >      case "dashboard":</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;Dashboard onNavigate={setCurrentPage} /&gt;;</span>
-<span class="cstat-no" title="statement not covered" >      case "analytics":</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;AnalyticsDashboard /&gt;;</span>
-<span class="cstat-no" title="statement not covered" >      case "classes":</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;ClassList /&gt;;</span>
-<span class="cstat-no" title="statement not covered" >      case "users":</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;UserList currentUser={user} /&gt;;</span>
-<span class="cstat-no" title="statement not covered" >      case "requests":</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;RequestList /&gt;;</span>
-<span class="cstat-no" title="statement not covered" >      case "settings":</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;SettingsPage /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >      case 'organizations':</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;OrganizationList /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      case 'dashboard':</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;Dashboard onNavigate={setCurrentPage} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      case 'analytics':</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;AnalyticsDashboard /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      case 'classes':</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;ClassList /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      case 'users':</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;UserList currentUser={user} /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      case 'requests':</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;RequestList /&gt;</span>
+<span class="cstat-no" title="statement not covered" >      case 'settings':</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;SettingsPage /&gt;</span>
 <span class="cstat-no" title="statement not covered" >      default:</span>
-<span class="cstat-no" title="statement not covered" >        return &lt;OrganizationList /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >        return &lt;OrganizationList /&gt;</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >  }</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
 <span class="cstat-no" title="statement not covered" >    &lt;div className="flex flex-col h-screen bg-background"&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;Header /&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;div className="flex flex-1 overflow-hidden"&gt;</span>
 <span class="cstat-no" title="statement not covered" >        &lt;Sidebar currentPage={currentPage} onPageChange={setCurrentPage} /&gt;</span>
-<span class="cstat-no" title="statement not covered" >        &lt;main className="flex-1 overflow-y-auto"&gt;</span>
-<span class="cstat-no" title="statement not covered" >          {renderCurrentPage()}</span>
-<span class="cstat-no" title="statement not covered" >        &lt;/main&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;main className="flex-1 overflow-y-auto"&gt;{renderCurrentPage()}&lt;/main&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;/div&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;ToastContainer /&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
-  );
+  )
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >function App() {</span>
@@ -302,10 +296,10 @@
 <span class="cstat-no" title="statement not covered" >        &lt;/NotificationProvider&gt;</span>
 <span class="cstat-no" title="statement not covered" >      &lt;/SettingsProvider&gt;</span>
 <span class="cstat-no" title="statement not covered" >    &lt;/AuthProvider&gt;</span>
-  );
+  )
 <span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export default App;</span>
+<span class="cstat-no" title="statement not covered" >export default App</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -313,7 +307,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-06T23:38:03.083Z
+                at 2025-07-07T00:22:08.692Z
             </div>
         <script src="../prettify.js"></script>
         <script>
