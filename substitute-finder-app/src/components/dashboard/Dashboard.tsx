@@ -1,109 +1,122 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, CheckCircle, XCircle, Users, Building, GraduationCap, TrendingUp, BarChart3 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { substituteApi, classApi, organizationApi, userApi } from '../../lib/api';
-import { SubstituteRequest, Class, Organization, User } from '../../types';
-import { useAuth } from '../../contexts/AuthContext';
+import React, { useState, useEffect } from 'react'
+import {
+  Calendar,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Users,
+  Building,
+  GraduationCap,
+  TrendingUp,
+  BarChart3,
+} from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { Button } from '../ui/button'
+import { substituteApi, classApi, organizationApi, userApi } from '../../lib/api'
+import type { SubstituteRequest, Class, Organization, User } from '../../types'
+import { useAuth } from '../../contexts/AuthContext'
 
 interface DashboardProps {
-  onNavigate?: (page: string) => void;
+  onNavigate?: (page: string) => void
 }
 
 export function Dashboard({ onNavigate }: DashboardProps) {
-  const { user } = useAuth();
-  const [requests, setRequests] = useState<SubstituteRequest[]>([]);
-  const [classes, setClasses] = useState<Class[]>([]);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth()
+  const [requests, setRequests] = useState<SubstituteRequest[]>([])
+  const [classes, setClasses] = useState<Class[]>([])
+  const [organizations, setOrganizations] = useState<Organization[]>([])
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    loadData();
-  }, []);
+    loadData()
+  }, [])
 
   const loadData = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       const [requestsData, classesData, orgsData, usersData] = await Promise.all([
         substituteApi.getAll(),
         classApi.getAll(),
         organizationApi.getAll(),
-        userApi.getAll()
-      ]);
-      setRequests(requestsData);
-      setClasses(classesData);
-      setOrganizations(orgsData);
-      setUsers(usersData);
-      setError(null);
+        userApi.getAll(),
+      ])
+      setRequests(requestsData)
+      setClasses(classesData)
+      setOrganizations(orgsData)
+      setUsers(usersData)
+      setError(null)
     } catch (err) {
-      setError('Failed to load dashboard data');
-      console.error('Error loading data:', err);
+      setError('Failed to load dashboard data')
+      console.error('Error loading data:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-muted-foreground">Loading dashboard...</div>
       </div>
-    );
+    )
   }
 
   // Calculate metrics
-  const openRequests = requests.filter(r => r.status === 'open');
-  const filledRequests = requests.filter(r => r.status === 'filled');
-  const cancelledRequests = requests.filter(r => r.status === 'cancelled');
-  
-  const totalRequests = requests.length;
-  const fillRate = totalRequests > 0 ? Math.round((filledRequests.length / totalRequests) * 100) : 0;
-  
-  const substitutes = users.filter(u => u.role === 'substitute');
-  const admins = users.filter(u => u.role === 'admin');
-  const orgManagers = users.filter(u => u.role === 'org_manager');
+  const openRequests = requests.filter((r) => r.status === 'open')
+  const filledRequests = requests.filter((r) => r.status === 'filled')
+  const cancelledRequests = requests.filter((r) => r.status === 'cancelled')
+
+  const totalRequests = requests.length
+  const fillRate = totalRequests > 0 ? Math.round((filledRequests.length / totalRequests) * 100) : 0
+
+  const substitutes = users.filter((u) => u.role === 'substitute')
+  const admins = users.filter((u) => u.role === 'admin')
+  const orgManagers = users.filter((u) => u.role === 'org_manager')
 
   // Get upcoming requests (next 7 days)
-  const today = new Date();
-  const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-  
-  const upcomingRequests = openRequests.filter(r => {
-    const requestDate = new Date(r.date_needed);
-    return requestDate >= today && requestDate <= nextWeek;
-  }).sort((a, b) => new Date(a.date_needed).getTime() - new Date(b.date_needed).getTime());
+  const today = new Date()
+  const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
+
+  const upcomingRequests = openRequests
+    .filter((r) => {
+      const requestDate = new Date(r.date_needed)
+      return requestDate >= today && requestDate <= nextWeek
+    })
+    .sort((a, b) => new Date(a.date_needed).getTime() - new Date(b.date_needed).getTime())
 
   const getClassName = (classId: string) => {
-    const cls = classes.find(c => c.id === classId);
-    return cls?.name || 'Unknown Class';
-  };
+    const cls = classes.find((c) => c.id === classId)
+    return cls?.name || 'Unknown Class'
+  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
-      day: 'numeric'
-    });
-  };
+      day: 'numeric',
+    })
+  }
 
   const formatTime = (timeString: string) => {
-    const [hours, minutes] = timeString.split(':');
-    const time = new Date();
-    time.setHours(parseInt(hours), parseInt(minutes));
+    const [hours, minutes] = timeString.split(':')
+    const time = new Date()
+    time.setHours(parseInt(hours), parseInt(minutes))
     return time.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: '2-digit',
-      hour12: true
-    });
-  };
+      hour12: true,
+    })
+  }
 
   return (
     <div className="p-6 space-y-6">
       <div>
         <h2 className="text-3xl font-bold">Dashboard</h2>
         <p className="text-muted-foreground">
-          Welcome back, {user?.first_name}! Here's an overview of substitute requests and system activity.
+          Welcome back, {user?.first_name}! Here's an overview of substitute requests and system
+          activity.
         </p>
       </div>
 
@@ -122,9 +135,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-orange-600">{openRequests.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Awaiting substitutes
-            </p>
+            <p className="text-xs text-muted-foreground">Awaiting substitutes</p>
           </CardContent>
         </Card>
 
@@ -135,9 +146,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">{filledRequests.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Successfully filled
-            </p>
+            <p className="text-xs text-muted-foreground">Successfully filled</p>
           </CardContent>
         </Card>
 
@@ -148,9 +157,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-600">{fillRate}%</div>
-            <p className="text-xs text-muted-foreground">
-              Overall success rate
-            </p>
+            <p className="text-xs text-muted-foreground">Overall success rate</p>
           </CardContent>
         </Card>
 
@@ -161,9 +168,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-purple-600">{substitutes.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Registered substitutes
-            </p>
+            <p className="text-xs text-muted-foreground">Registered substitutes</p>
           </CardContent>
         </Card>
       </div>
@@ -176,33 +181,39 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               <BarChart3 className="w-5 h-5" />
               Analytics Overview
             </CardTitle>
-            <CardDescription>
-              Quick insights and trends
-            </CardDescription>
+            <CardDescription>Quick insights and trends</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm">This Month</span>
-                <span className="font-medium">{requests.filter(r => {
-                  const requestDate = new Date(r.created_at);
-                  const now = new Date();
-                  return requestDate.getMonth() === now.getMonth() && requestDate.getFullYear() === now.getFullYear();
-                }).length} requests</span>
+                <span className="font-medium">
+                  {
+                    requests.filter((r) => {
+                      const requestDate = new Date(r.created_at)
+                      const now = new Date()
+                      return (
+                        requestDate.getMonth() === now.getMonth() &&
+                        requestDate.getFullYear() === now.getFullYear()
+                      )
+                    }).length
+                  }{' '}
+                  requests
+                </span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <span className="text-sm">Best Day</span>
                 <span className="font-medium">Monday</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <span className="text-sm">Avg Response</span>
                 <span className="font-medium">{Math.round(Math.random() * 12 + 4)}h</span>
               </div>
-              
-              <Button 
-                variant="outline" 
+
+              <Button
+                variant="outline"
                 className="w-full mt-4"
                 onClick={() => onNavigate?.('analytics')}
               >
@@ -220,25 +231,29 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               <Calendar className="w-5 h-5" />
               Upcoming Requests (Next 7 Days)
             </CardTitle>
-            <CardDescription>
-              Open substitute requests that need attention
-            </CardDescription>
+            <CardDescription>Open substitute requests that need attention</CardDescription>
           </CardHeader>
           <CardContent>
             {upcomingRequests.length === 0 ? (
               <div className="text-center py-8">
                 <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
                 <p className="text-muted-foreground">No upcoming requests</p>
-                <p className="text-sm text-muted-foreground">All requests for the next week are filled</p>
+                <p className="text-sm text-muted-foreground">
+                  All requests for the next week are filled
+                </p>
               </div>
             ) : (
               <div className="space-y-3">
                 {upcomingRequests.slice(0, 5).map((request) => (
-                  <div key={request.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={request.id}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div>
                       <div className="font-medium">{getClassName(request.class_id)}</div>
                       <div className="text-sm text-muted-foreground">
-                        {formatDate(request.date_needed)} • {formatTime(request.start_time)} - {formatTime(request.end_time)}
+                        {formatDate(request.date_needed)} • {formatTime(request.start_time)} -{' '}
+                        {formatTime(request.end_time)}
                       </div>
                       {request.reason && (
                         <div className="text-xs text-muted-foreground">
@@ -270,9 +285,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               <Building className="w-5 h-5" />
               System Overview
             </CardTitle>
-            <CardDescription>
-              Current system statistics and user counts
-            </CardDescription>
+            <CardDescription>Current system statistics and user counts</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -283,7 +296,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 </div>
                 <span className="font-medium">{organizations.length}</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <GraduationCap className="w-4 h-4 text-green-500" />
@@ -291,7 +304,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 </div>
                 <span className="font-medium">{classes.length}</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Users className="w-4 h-4 text-purple-500" />
@@ -299,7 +312,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 </div>
                 <span className="font-medium">{substitutes.length}</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Users className="w-4 h-4 text-blue-500" />
@@ -307,7 +320,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 </div>
                 <span className="font-medium">{orgManagers.length}</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Users className="w-4 h-4 text-red-500" />
@@ -322,7 +335,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                   <span className="font-bold">{totalRequests}</span>
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  {filledRequests.length} filled • {openRequests.length} open • {cancelledRequests.length} cancelled
+                  {filledRequests.length} filled • {openRequests.length} open •{' '}
+                  {cancelledRequests.length} cancelled
                 </div>
               </div>
             </div>
@@ -335,9 +349,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>
-              Common tasks and shortcuts
-            </CardDescription>
+            <CardDescription>Common tasks and shortcuts</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -358,5 +370,5 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </Card>
       )}
     </div>
-  );
+  )
 }

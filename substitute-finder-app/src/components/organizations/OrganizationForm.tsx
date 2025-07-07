@@ -1,33 +1,39 @@
-import React, { useState } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { organizationApi } from '../../lib/api';
-import { Organization, CreateOrganizationRequest } from '../../types';
+import type React from 'react'
+import { useState } from 'react'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { organizationApi } from '../../lib/api'
+import type { Organization, CreateOrganizationRequest } from '../../types'
 
 interface OrganizationFormProps {
-  organization?: Organization | null;
-  organizations: Organization[];
-  onSubmit: () => void;
-  onCancel: () => void;
+  organization?: Organization | null
+  organizations: Organization[]
+  onSubmit: () => void
+  onCancel: () => void
 }
 
-export function OrganizationForm({ organization, organizations, onSubmit, onCancel }: OrganizationFormProps) {
+export function OrganizationForm({
+  organization,
+  organizations,
+  onSubmit,
+  onCancel,
+}: OrganizationFormProps) {
   const [formData, setFormData] = useState<CreateOrganizationRequest>({
     name: organization?.name || '',
     parent_organization_id: organization?.parent_organization_id || '',
     description: organization?.description || '',
     contact_email: organization?.contact_email || '',
     contact_phone: organization?.contact_phone || '',
-  });
-  
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  })
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
     try {
       const submitData = {
@@ -36,44 +42,41 @@ export function OrganizationForm({ organization, organizations, onSubmit, onCanc
         description: formData.description || undefined,
         contact_email: formData.contact_email || undefined,
         contact_phone: formData.contact_phone || undefined,
-      };
+      }
 
       if (organization) {
-        await organizationApi.update(organization.id, submitData);
+        await organizationApi.update(organization.id, submitData)
       } else {
-        await organizationApi.create(submitData);
+        await organizationApi.create(submitData)
       }
-      
-      onSubmit();
+
+      onSubmit()
     } catch (err) {
-      setError(`Failed to ${organization ? 'update' : 'create'} organization`);
-      console.error('Error submitting organization:', err);
+      setError(`Failed to ${organization ? 'update' : 'create'} organization`)
+      console.error('Error submitting organization:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleChange = (field: keyof CreateOrganizationRequest, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
-    }));
-  };
+      [field]: value,
+    }))
+  }
 
   // Filter out the current organization from parent options to prevent circular references
-  const availableParents = organizations.filter(org => org.id !== organization?.id);
+  const availableParents = organizations.filter((org) => org.id !== organization?.id)
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          {organization ? 'Edit Organization' : 'Create New Organization'}
-        </CardTitle>
+        <CardTitle>{organization ? 'Edit Organization' : 'Create New Organization'}</CardTitle>
         <CardDescription>
-          {organization 
-            ? 'Update the organization details below.' 
-            : 'Fill in the details to create a new organization.'
-          }
+          {organization
+            ? 'Update the organization details below.'
+            : 'Fill in the details to create a new organization.'}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -160,23 +163,21 @@ export function OrganizationForm({ organization, organizations, onSubmit, onCanc
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={loading}
-            >
+            <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading 
-                ? (organization ? 'Updating...' : 'Creating...') 
-                : (organization ? 'Update Organization' : 'Create Organization')
-              }
+              {loading
+                ? organization
+                  ? 'Updating...'
+                  : 'Creating...'
+                : organization
+                  ? 'Update Organization'
+                  : 'Create Organization'}
             </Button>
           </div>
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

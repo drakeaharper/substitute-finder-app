@@ -38,6 +38,8 @@ A cross-platform desktop application built with Tauri, React, and TypeScript to 
 - **State Management**: Zustand + TanStack React Query
 - **Package Manager**: Bun
 - **Build Tool**: Vite
+- **Testing**: Vitest + React Testing Library + Playwright
+- **Code Quality**: Biome (formatter & linter)
 
 ## Architecture
 
@@ -133,10 +135,27 @@ src-tauri/
 
 ### Available Scripts
 
+#### Development
 - `bun run dev` - Start Vite development server
 - `bun run build` - Build frontend for production
 - `bun run tauri dev` - Start Tauri development server
 - `bun run tauri build` - Build complete application
+
+#### Testing
+- `bun test` - Run Vitest unit tests
+- `bun test:ui` - Run Vitest with UI
+- `bun test:coverage` - Run tests with coverage report
+- `bun test:e2e` - Run Playwright integration tests
+- `bun test:e2e:ui` - Run Playwright with UI
+- `bun test:rust` - Run Rust tests (requires Cargo)
+
+#### Code Quality
+- `bun format` - Format code with Biome
+- `bun format:check` - Check formatting without changes
+- `bun lint` - Lint code with Biome
+- `bun lint:fix` - Auto-fix linting issues
+- `bun check` - Run both formatting and linting
+- `bun check:fix` - Auto-fix both formatting and linting
 
 ### Database Schema
 
@@ -157,12 +176,21 @@ The application uses SQLite with the following main entities:
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
-## Code Style
+## Code Quality & Testing
 
+### Testing Framework
+- **Unit Tests**: Vitest with React Testing Library for component testing
+- **Integration Tests**: Playwright for end-to-end testing across multiple browsers
+- **Backend Tests**: Rust's built-in test framework for database and API logic
+- **Coverage**: Comprehensive test coverage reporting
+
+### Code Style & Formatting
+- **Biome**: Fast formatter and linter with auto-fixing capabilities
 - **TypeScript**: Strict mode with comprehensive type safety
-- **React**: Functional components with hooks
+- **React**: Functional components with hooks, modern patterns
 - **Rust**: Standard formatting with `cargo fmt`
 - **CSS**: Tailwind utility classes with custom design system
+- **Import Organization**: Automatic import sorting and cleanup
 
 ## Security
 

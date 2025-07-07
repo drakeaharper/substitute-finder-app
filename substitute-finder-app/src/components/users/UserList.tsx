@@ -1,138 +1,142 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Users, Shield, User as UserIcon, Building, Download } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { userApi, organizationApi } from '../../lib/api';
-import { User, Organization } from '../../types';
-import { UserForm } from './UserForm';
-import { CSVExporter } from '../../lib/export';
-import { useNotifications } from '../../contexts/NotificationContext';
+import React, { useState, useEffect } from 'react'
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Users,
+  Shield,
+  User as UserIcon,
+  Building,
+  Download,
+} from 'lucide-react'
+import { Button } from '../ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { userApi, organizationApi } from '../../lib/api'
+import type { User, Organization } from '../../types'
+import { UserForm } from './UserForm'
+import { CSVExporter } from '../../lib/export'
+import { useNotifications } from '../../contexts/NotificationContext'
 
 interface UserListProps {
-  currentUser: User;
+  currentUser: User
 }
 
 export function UserList({ currentUser }: UserListProps) {
-  const { addNotification } = useNotifications();
-  const [users, setUsers] = useState<User[]>([]);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedRole, setSelectedRole] = useState<string>('');
+  const { addNotification } = useNotifications()
+  const [users, setUsers] = useState<User[]>([])
+  const [organizations, setOrganizations] = useState<Organization[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [editingUser, setEditingUser] = useState<User | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedRole, setSelectedRole] = useState<string>('')
 
   useEffect(() => {
-    loadData();
-  }, []);
+    loadData()
+  }, [])
 
   const loadData = async () => {
     try {
-      setLoading(true);
-      const [usersData, orgsData] = await Promise.all([
-        userApi.getAll(),
-        organizationApi.getAll()
-      ]);
-      setUsers(usersData);
-      setOrganizations(orgsData);
-      setError(null);
+      setLoading(true)
+      const [usersData, orgsData] = await Promise.all([userApi.getAll(), organizationApi.getAll()])
+      setUsers(usersData)
+      setOrganizations(orgsData)
+      setError(null)
     } catch (err) {
-      setError('Failed to load users and organizations');
-      console.error('Error loading data:', err);
+      setError('Failed to load users and organizations')
+      console.error('Error loading data:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleFormSubmit = async () => {
-    setShowForm(false);
-    setEditingUser(null);
-    await loadData();
-  };
+    setShowForm(false)
+    setEditingUser(null)
+    await loadData()
+  }
 
   const handleEdit = (user: User) => {
-    setEditingUser(user);
-    setShowForm(true);
-  };
+    setEditingUser(user)
+    setShowForm(true)
+  }
 
   const handleAdd = () => {
-    setEditingUser(null);
-    setShowForm(true);
-  };
+    setEditingUser(null)
+    setShowForm(true)
+  }
 
   const handleExportUsers = async () => {
     try {
-      CSVExporter.exportUsers(filteredUsers, organizations);
+      CSVExporter.exportUsers(filteredUsers, organizations)
       addNotification({
         title: 'Export Successful',
         body: 'Users have been exported to CSV',
-        notification_type: 'success'
-      });
+        notification_type: 'success',
+      })
     } catch (error) {
-      console.error('Export failed:', error);
+      console.error('Export failed:', error)
       addNotification({
         title: 'Export Failed',
         body: 'Failed to export users',
-        notification_type: 'error'
-      });
+        notification_type: 'error',
+      })
     }
-  };
+  }
 
   const getOrganizationName = (orgId?: string) => {
-    if (!orgId) return 'No Organization';
-    const org = organizations.find(o => o.id === orgId);
-    return org?.name || 'Unknown Organization';
-  };
+    if (!orgId) return 'No Organization'
+    const org = organizations.find((o) => o.id === orgId)
+    return org?.name || 'Unknown Organization'
+  }
 
   const getRoleIcon = (role: string) => {
     switch (role) {
       case 'admin':
-        return <Shield className="w-4 h-4 text-red-500" />;
+        return <Shield className="w-4 h-4 text-red-500" />
       case 'org_manager':
-        return <Building className="w-4 h-4 text-blue-500" />;
+        return <Building className="w-4 h-4 text-blue-500" />
       case 'substitute':
-        return <UserIcon className="w-4 h-4 text-green-500" />;
+        return <UserIcon className="w-4 h-4 text-green-500" />
       default:
-        return <UserIcon className="w-4 h-4 text-gray-500" />;
+        return <UserIcon className="w-4 h-4 text-gray-500" />
     }
-  };
+  }
 
   const getRoleLabel = (role: string) => {
     switch (role) {
       case 'admin':
-        return 'Administrator';
+        return 'Administrator'
       case 'org_manager':
-        return 'Organization Manager';
+        return 'Organization Manager'
       case 'substitute':
-        return 'Substitute Teacher';
+        return 'Substitute Teacher'
       default:
-        return role;
+        return role
     }
-  };
+  }
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case 'admin':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-red-100 text-red-800 border-red-200'
       case 'org_manager':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-blue-100 text-blue-800 border-blue-200'
       case 'substitute':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-green-100 text-green-800 border-green-200'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-gray-100 text-gray-800 border-gray-200'
     }
-  };
+  }
 
-  const filteredUsers = selectedRole 
-    ? users.filter(user => user.role === selectedRole)
-    : users;
+  const filteredUsers = selectedRole ? users.filter((user) => user.role === selectedRole) : users
 
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-muted-foreground">Loading users...</div>
       </div>
-    );
+    )
   }
 
   return (
@@ -142,7 +146,7 @@ export function UserList({ currentUser }: UserListProps) {
           <h2 className="text-3xl font-bold">Users</h2>
           <p className="text-muted-foreground">Manage user accounts and permissions</p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={handleExportUsers}>
             <Download className="w-4 h-4 mr-2" />
@@ -191,8 +195,8 @@ export function UserList({ currentUser }: UserListProps) {
             organizations={organizations}
             onSubmit={handleFormSubmit}
             onCancel={() => {
-              setShowForm(false);
-              setEditingUser(null);
+              setShowForm(false)
+              setEditingUser(null)
             }}
           />
         </div>
@@ -208,10 +212,9 @@ export function UserList({ currentUser }: UserListProps) {
                   {selectedRole ? 'No Users with Selected Role' : 'No Users'}
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  {selectedRole 
-                    ? 'No users found with the selected role.' 
-                    : 'Get started by creating your first user account.'
-                  }
+                  {selectedRole
+                    ? 'No users found with the selected role.'
+                    : 'Get started by creating your first user account.'}
                 </p>
                 {currentUser.role === 'admin' && (
                   <Button onClick={handleAdd}>
@@ -240,11 +243,7 @@ export function UserList({ currentUser }: UserListProps) {
                   </div>
                   {currentUser.role === 'admin' && (
                     <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(user)}
-                      >
+                      <Button variant="outline" size="sm" onClick={() => handleEdit(user)}>
                         <Edit className="w-4 h-4" />
                       </Button>
                     </div>
@@ -254,17 +253,19 @@ export function UserList({ currentUser }: UserListProps) {
               <CardContent>
                 <div className="space-y-3">
                   <div>
-                    <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${getRoleBadgeColor(user.role)}`}>
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${getRoleBadgeColor(user.role)}`}
+                    >
                       {getRoleIcon(user.role)}
                       {getRoleLabel(user.role)}
                     </span>
                   </div>
-                  
+
                   <div className="text-sm">
                     <div className="font-medium text-muted-foreground">Email:</div>
                     <div>{user.email}</div>
                   </div>
-                  
+
                   <div className="text-sm">
                     <div className="font-medium text-muted-foreground">Organization:</div>
                     <div className="flex items-center gap-1">
@@ -272,18 +273,17 @@ export function UserList({ currentUser }: UserListProps) {
                       {getOrganizationName(user.organization_id)}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
                     <span>
-                      Status: {user.is_active ? (
+                      Status:{' '}
+                      {user.is_active ? (
                         <span className="text-green-600 font-medium">Active</span>
                       ) : (
                         <span className="text-red-600 font-medium">Inactive</span>
                       )}
                     </span>
-                    <span>
-                      Joined: {new Date(user.created_at).toLocaleDateString()}
-                    </span>
+                    <span>Joined: {new Date(user.created_at).toLocaleDateString()}</span>
                   </div>
                 </div>
               </CardContent>
@@ -292,5 +292,5 @@ export function UserList({ currentUser }: UserListProps) {
         )}
       </div>
     </div>
-  );
+  )
 }

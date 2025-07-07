@@ -259,3 +259,94 @@ pub struct CreateSubstituteRequestRequest {
     pub reason: Option<String>,
     pub special_instructions: Option<String>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::str::FromStr;
+
+    #[test]
+    fn test_user_role_display() {
+        assert_eq!(UserRole::Admin.to_string(), "admin");
+        assert_eq!(UserRole::OrgManager.to_string(), "org_manager");
+        assert_eq!(UserRole::Substitute.to_string(), "substitute");
+    }
+
+    #[test]
+    fn test_user_role_from_str() {
+        assert!(matches!(UserRole::from_str("admin"), Ok(UserRole::Admin)));
+        assert!(matches!(UserRole::from_str("org_manager"), Ok(UserRole::OrgManager)));
+        assert!(matches!(UserRole::from_str("substitute"), Ok(UserRole::Substitute)));
+        assert!(UserRole::from_str("invalid").is_err());
+    }
+
+    #[test]
+    fn test_request_status_display() {
+        assert_eq!(RequestStatus::Open.to_string(), "open");
+        assert_eq!(RequestStatus::Filled.to_string(), "filled");
+        assert_eq!(RequestStatus::Cancelled.to_string(), "cancelled");
+    }
+
+    #[test]
+    fn test_request_status_from_str() {
+        assert!(matches!(RequestStatus::from_str("open"), Ok(RequestStatus::Open)));
+        assert!(matches!(RequestStatus::from_str("filled"), Ok(RequestStatus::Filled)));
+        assert!(matches!(RequestStatus::from_str("cancelled"), Ok(RequestStatus::Cancelled)));
+        assert!(RequestStatus::from_str("invalid").is_err());
+    }
+
+    #[test]
+    fn test_response_type_display() {
+        assert_eq!(ResponseType::Accepted.to_string(), "accepted");
+        assert_eq!(ResponseType::Declined.to_string(), "declined");
+    }
+
+    #[test]
+    fn test_response_type_from_str() {
+        assert!(matches!(ResponseType::from_str("accepted"), Ok(ResponseType::Accepted)));
+        assert!(matches!(ResponseType::from_str("declined"), Ok(ResponseType::Declined)));
+        assert!(ResponseType::from_str("invalid").is_err());
+    }
+
+    #[test]
+    fn test_serde_serialization() {
+        let user_role = UserRole::Admin;
+        let json = serde_json::to_string(&user_role).unwrap();
+        let deserialized: UserRole = serde_json::from_str(&json).unwrap();
+        assert!(matches!(deserialized, UserRole::Admin));
+    }
+
+    #[test]
+    fn test_create_organization_request_serialization() {
+        let request = CreateOrganizationRequest {
+            name: "Test School".to_string(),
+            parent_organization_id: None,
+            description: Some("A test school".to_string()),
+            contact_email: Some("test@example.com".to_string()),
+            contact_phone: Some("123-456-7890".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        let deserialized: CreateOrganizationRequest = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.name, "Test School");
+        assert_eq!(deserialized.contact_email, Some("test@example.com".to_string()));
+    }
+
+    #[test]
+    fn test_create_user_request_serialization() {
+        let request = CreateUserRequest {
+            username: "testuser".to_string(),
+            password: "password123".to_string(),
+            email: "test@example.com".to_string(),
+            first_name: "Test".to_string(),
+            last_name: "User".to_string(),
+            role: UserRole::Admin,
+            organization_id: Some("org123".to_string()),
+        };
+
+        let json = serde_json::to_string(&request).unwrap();
+        let deserialized: CreateUserRequest = serde_json::from_str(&json).unwrap();
+        assert_eq!(deserialized.username, "testuser");
+        assert!(matches!(deserialized.role, UserRole::Admin));
+    }
+}

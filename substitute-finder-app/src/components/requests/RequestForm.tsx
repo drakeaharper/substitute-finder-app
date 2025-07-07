@@ -1,23 +1,35 @@
-import React, { useState } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { substituteApi, notificationApi } from '../../lib/api';
-import { SubstituteRequest, Class, CreateSubstituteRequestRequest, User as UserType } from '../../types';
-import { useAuth } from '../../contexts/AuthContext';
-import { useNotifications } from '../../contexts/NotificationContext';
+import type React from 'react'
+import { useState } from 'react'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { substituteApi, notificationApi } from '../../lib/api'
+import type {
+  SubstituteRequest,
+  Class,
+  CreateSubstituteRequestRequest,
+  User as UserType,
+} from '../../types'
+import { useAuth } from '../../contexts/AuthContext'
+import { useNotifications } from '../../contexts/NotificationContext'
 
 interface RequestFormProps {
-  request?: SubstituteRequest | null;
-  classes: Class[];
-  users: UserType[];
-  onSubmit: () => void;
-  onCancel: () => void;
+  request?: SubstituteRequest | null
+  classes: Class[]
+  users: UserType[]
+  onSubmit: () => void
+  onCancel: () => void
 }
 
-export function RequestForm({ request: editRequest, classes, users, onSubmit, onCancel }: RequestFormProps) {
-  const { user } = useAuth();
-  const { addNotification } = useNotifications();
+export function RequestForm({
+  request: editRequest,
+  classes,
+  users,
+  onSubmit,
+  onCancel,
+}: RequestFormProps) {
+  const { user } = useAuth()
+  const { addNotification } = useNotifications()
   const [formData, setFormData] = useState<CreateSubstituteRequestRequest>({
     class_id: editRequest?.class_id || '',
     date_needed: editRequest?.date_needed || '',
@@ -25,99 +37,100 @@ export function RequestForm({ request: editRequest, classes, users, onSubmit, on
     end_time: editRequest?.end_time || '15:00',
     reason: editRequest?.reason || '',
     special_instructions: editRequest?.special_instructions || '',
-  });
-  
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  })
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
+    e.preventDefault()
+
     if (!user) {
-      setError('User not authenticated');
-      return;
+      setError('User not authenticated')
+      return
     }
 
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     try {
       const submitData = {
         ...formData,
         reason: formData.reason || undefined,
         special_instructions: formData.special_instructions || undefined,
-      };
+      }
 
       if (editRequest) {
         // For now, we don't support editing requests
-        setError('Editing requests is not yet implemented. Please create a new request instead.');
-        setLoading(false);
-        return;
+        setError('Editing requests is not yet implemented. Please create a new request instead.')
+        setLoading(false)
+        return
       }
 
-      const newRequest = await substituteApi.create(user.id, submitData);
-      
+      const newRequest = await substituteApi.create(user.id, submitData)
+
       // Send notifications to substitute teachers
       try {
-        const selectedClass = classes.find(cls => cls.id === submitData.class_id);
-        const className = selectedClass ? selectedClass.name : 'Unknown Class';
-        
+        const selectedClass = classes.find((cls) => cls.id === submitData.class_id)
+        const className = selectedClass ? selectedClass.name : 'Unknown Class'
+
         // Get all substitute teachers
-        const substituteTeachers = users.filter(u => u.role === 'substitute');
-        const substituteUserIds = substituteTeachers.map(u => u.id);
-        
+        const substituteTeachers = users.filter((u) => u.role === 'substitute')
+        const substituteUserIds = substituteTeachers.map((u) => u.id)
+
         if (substituteUserIds.length > 0) {
           await notificationApi.notifySubstituteRequestCreated(
             newRequest.id,
             className,
             submitData.date_needed,
             substituteUserIds
-          );
-          
+          )
+
           addNotification({
             title: 'Notifications Sent',
             body: `Notified ${substituteUserIds.length} substitute teachers about the new request`,
-            notification_type: 'success'
-          });
+            notification_type: 'success',
+          })
         } else {
           addNotification({
             title: 'No Substitutes Available',
             body: 'No substitute teachers found to notify',
-            notification_type: 'warning'
-          });
+            notification_type: 'warning',
+          })
         }
       } catch (notificationError) {
-        console.error('Failed to send notifications:', notificationError);
+        console.error('Failed to send notifications:', notificationError)
         addNotification({
           title: 'Notification Error',
           body: 'Request created but failed to notify substitutes',
-          notification_type: 'warning'
-        });
+          notification_type: 'warning',
+        })
       }
-      
-      onSubmit();
+
+      onSubmit()
     } catch (err) {
-      setError(`Failed to ${editRequest ? 'update' : 'create'} substitute request`);
-      console.error('Error submitting request:', err);
+      setError(`Failed to ${editRequest ? 'update' : 'create'} substitute request`)
+      console.error('Error submitting request:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleChange = (field: keyof CreateSubstituteRequestRequest, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
-    }));
-  };
+      [field]: value,
+    }))
+  }
 
   // Filter classes based on user's organization if they're an org_manager
-  const availableClasses = user?.role === 'org_manager' && user.organization_id
-    ? classes.filter(cls => cls.organization_id === user.organization_id)
-    : classes;
+  const availableClasses =
+    user?.role === 'org_manager' && user.organization_id
+      ? classes.filter((cls) => cls.organization_id === user.organization_id)
+      : classes
 
   // Get today's date for min date validation
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0]
 
   return (
     <Card>
@@ -126,10 +139,9 @@ export function RequestForm({ request: editRequest, classes, users, onSubmit, on
           {editRequest ? 'Edit Substitute Request' : 'Create New Substitute Request'}
         </CardTitle>
         <CardDescription>
-          {editRequest 
-            ? 'Update the substitute request details below.' 
-            : 'Fill in the details to create a new substitute request.'
-          }
+          {editRequest
+            ? 'Update the substitute request details below.'
+            : 'Fill in the details to create a new substitute request.'}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -155,7 +167,8 @@ export function RequestForm({ request: editRequest, classes, users, onSubmit, on
                 <option value="">Select a class</option>
                 {availableClasses.map((cls) => (
                   <option key={cls.id} value={cls.id}>
-                    {cls.name} {cls.subject && `- ${cls.subject}`} {cls.room_number && `(${cls.room_number})`}
+                    {cls.name} {cls.subject && `- ${cls.subject}`}{' '}
+                    {cls.room_number && `(${cls.room_number})`}
                   </option>
                 ))}
               </select>
@@ -248,23 +261,21 @@ export function RequestForm({ request: editRequest, classes, users, onSubmit, on
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={loading}
-            >
+            <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading 
-                ? (editRequest ? 'Updating...' : 'Creating...') 
-                : (editRequest ? 'Update Request' : 'Create Request')
-              }
+              {loading
+                ? editRequest
+                  ? 'Updating...'
+                  : 'Creating...'
+                : editRequest
+                  ? 'Update Request'
+                  : 'Create Request'}
             </Button>
           </div>
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

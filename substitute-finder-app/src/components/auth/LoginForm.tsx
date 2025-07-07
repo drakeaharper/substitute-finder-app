@@ -1,58 +1,59 @@
-import React, { useState } from 'react';
-import { LogIn, Eye, EyeOff } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { userApi, seedApi } from '../../lib/api';
-import { User } from '../../types';
+import type React from 'react'
+import { useState } from 'react'
+import { LogIn, Eye, EyeOff } from 'lucide-react'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { userApi, seedApi } from '../../lib/api'
+import type { User } from '../../types'
 
 interface LoginFormProps {
-  onLogin: (user: User) => void;
+  onLogin: (user: User) => void
 }
 
 export function LoginForm({ onLogin }: LoginFormProps) {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const [seedMessage, setSeedMessage] = useState<string | null>(null);
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
+  const [seedMessage, setSeedMessage] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
     try {
-      const user = await userApi.login(formData.username, formData.password);
-      onLogin(user);
+      const user = await userApi.login(formData.username, formData.password)
+      onLogin(user)
     } catch (err) {
-      setError('Invalid username or password');
-      console.error('Login error:', err);
+      setError('Invalid username or password')
+      console.error('Login error:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleChange = (field: keyof typeof formData, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
-    }));
-  };
+      [field]: value,
+    }))
+  }
 
   const handleSeedDatabase = async () => {
     try {
-      const message = await seedApi.seedDatabase();
-      setSeedMessage(message);
-      setError(null);
+      const message = await seedApi.seedDatabase()
+      setSeedMessage(message)
+      setError(null)
     } catch (err) {
-      setError('Failed to seed database');
-      console.error('Seed error:', err);
+      setError('Failed to seed database')
+      console.error('Seed error:', err)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
@@ -62,9 +63,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
             <LogIn className="w-6 h-6 text-primary" />
           </div>
           <CardTitle className="text-2xl">Welcome Back</CardTitle>
-          <CardDescription>
-            Sign in to access the Substitute Finder Admin Panel
-          </CardDescription>
+          <CardDescription>Sign in to access the Substitute Finder Admin Panel</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -115,11 +114,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
@@ -140,24 +135,17 @@ export function LoginForm({ onLogin }: LoginFormProps) {
           </form>
 
           <div className="mt-6 pt-6 border-t space-y-4">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={handleSeedDatabase}
-            >
+            <Button type="button" variant="outline" className="w-full" onClick={handleSeedDatabase}>
               Seed Database with Demo Data
             </Button>
-            
+
             <div className="text-center text-sm text-muted-foreground">
               <p>Demo Credentials:</p>
-              <p className="font-mono text-xs mt-1">
-                Username: admin / Password: admin
-              </p>
+              <p className="font-mono text-xs mt-1">Username: admin / Password: admin</p>
             </div>
           </div>
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

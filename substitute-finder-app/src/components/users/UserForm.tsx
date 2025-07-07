@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { userApi } from '../../lib/api';
-import { User, Organization, CreateUserRequest } from '../../types';
+import type React from 'react'
+import { useState } from 'react'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { userApi } from '../../lib/api'
+import type { User, Organization, CreateUserRequest } from '../../types'
 
 interface UserFormProps {
-  user?: User | null;
-  organizations: Organization[];
-  onSubmit: () => void;
-  onCancel: () => void;
+  user?: User | null
+  organizations: Organization[]
+  onSubmit: () => void
+  onCancel: () => void
 }
 
 export function UserForm({ user: editUser, organizations, onSubmit, onCancel }: UserFormProps) {
@@ -21,58 +22,55 @@ export function UserForm({ user: editUser, organizations, onSubmit, onCancel }: 
     last_name: editUser?.last_name || '',
     role: editUser?.role || 'substitute',
     organization_id: editUser?.organization_id || undefined,
-  });
-  
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  })
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
     try {
       if (editUser) {
         // For editing, we would need an update user command
         // For now, we'll just show a message
-        setError('User editing is not yet implemented. Please create a new user instead.');
-        setLoading(false);
-        return;
+        setError('User editing is not yet implemented. Please create a new user instead.')
+        setLoading(false)
+        return
       }
 
       const submitData = {
         ...formData,
         organization_id: formData.organization_id || undefined,
-      };
+      }
 
-      await userApi.create(submitData);
-      onSubmit();
+      await userApi.create(submitData)
+      onSubmit()
     } catch (err) {
-      setError(`Failed to ${editUser ? 'update' : 'create'} user`);
-      console.error('Error submitting user:', err);
+      setError(`Failed to ${editUser ? 'update' : 'create'} user`)
+      console.error('Error submitting user:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleChange = (field: keyof CreateUserRequest, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: field === 'role' ? value as any : value
-    }));
-  };
+      [field]: field === 'role' ? (value as any) : value,
+    }))
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          {editUser ? 'Edit User' : 'Create New User'}
-        </CardTitle>
+        <CardTitle>{editUser ? 'Edit User' : 'Create New User'}</CardTitle>
         <CardDescription>
-          {editUser 
-            ? 'Update the user details below.' 
-            : 'Fill in the details to create a new user account.'
-          }
+          {editUser
+            ? 'Update the user details below.'
+            : 'Fill in the details to create a new user account.'}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -197,30 +195,36 @@ export function UserForm({ user: editUser, organizations, onSubmit, onCancel }: 
           <div className="bg-muted/50 p-4 rounded-lg">
             <h4 className="font-medium mb-2">Role Permissions:</h4>
             <div className="text-sm text-muted-foreground space-y-1">
-              <div><strong>Administrator:</strong> Full system access, can manage all organizations and users</div>
-              <div><strong>Organization Manager:</strong> Can manage classes and users within their organization</div>
-              <div><strong>Substitute Teacher:</strong> Can view and respond to substitute requests</div>
+              <div>
+                <strong>Administrator:</strong> Full system access, can manage all organizations and
+                users
+              </div>
+              <div>
+                <strong>Organization Manager:</strong> Can manage classes and users within their
+                organization
+              </div>
+              <div>
+                <strong>Substitute Teacher:</strong> Can view and respond to substitute requests
+              </div>
             </div>
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={loading}
-            >
+            <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading 
-                ? (editUser ? 'Updating...' : 'Creating...') 
-                : (editUser ? 'Update User' : 'Create User')
-              }
+              {loading
+                ? editUser
+                  ? 'Updating...'
+                  : 'Creating...'
+                : editUser
+                  ? 'Update User'
+                  : 'Create User'}
             </Button>
           </div>
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { classApi } from '../../lib/api';
-import { Class, Organization, CreateClassRequest } from '../../types';
+import type React from 'react'
+import { useState } from 'react'
+import { Button } from '../ui/button'
+import { Input } from '../ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { classApi } from '../../lib/api'
+import type { Class, Organization, CreateClassRequest } from '../../types'
 
 interface ClassFormProps {
-  class?: Class | null;
-  organizations: Organization[];
-  onSubmit: () => void;
-  onCancel: () => void;
+  class?: Class | null
+  organizations: Organization[]
+  onSubmit: () => void
+  onCancel: () => void
 }
 
 const COMMON_SUBJECTS = [
@@ -24,8 +25,8 @@ const COMMON_SUBJECTS = [
   'Foreign Language',
   'Health',
   'Library',
-  'Special Education'
-];
+  'Special Education',
+]
 
 const GRADE_LEVELS = [
   'Pre-K',
@@ -42,8 +43,8 @@ const GRADE_LEVELS = [
   '10th Grade',
   '11th Grade',
   '12th Grade',
-  'Mixed Grades'
-];
+  'Mixed Grades',
+]
 
 export function ClassForm({ class: editClass, organizations, onSubmit, onCancel }: ClassFormProps) {
   const [formData, setFormData] = useState<CreateClassRequest>({
@@ -53,15 +54,15 @@ export function ClassForm({ class: editClass, organizations, onSubmit, onCancel 
     grade_level: editClass?.grade_level || '',
     room_number: editClass?.room_number || '',
     description: editClass?.description || '',
-  });
-  
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  })
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
 
     try {
       const submitData = {
@@ -70,41 +71,38 @@ export function ClassForm({ class: editClass, organizations, onSubmit, onCancel 
         grade_level: formData.grade_level || undefined,
         room_number: formData.room_number || undefined,
         description: formData.description || undefined,
-      };
+      }
 
       if (editClass) {
-        await classApi.update(editClass.id, submitData);
+        await classApi.update(editClass.id, submitData)
       } else {
-        await classApi.create(submitData);
+        await classApi.create(submitData)
       }
-      
-      onSubmit();
+
+      onSubmit()
     } catch (err) {
-      setError(`Failed to ${editClass ? 'update' : 'create'} class`);
-      console.error('Error submitting class:', err);
+      setError(`Failed to ${editClass ? 'update' : 'create'} class`)
+      console.error('Error submitting class:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleChange = (field: keyof CreateClassRequest, value: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
-    }));
-  };
+      [field]: value,
+    }))
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          {editClass ? 'Edit Class' : 'Create New Class'}
-        </CardTitle>
+        <CardTitle>{editClass ? 'Edit Class' : 'Create New Class'}</CardTitle>
         <CardDescription>
-          {editClass 
-            ? 'Update the class details below.' 
-            : 'Fill in the details to create a new class.'
-          }
+          {editClass
+            ? 'Update the class details below.'
+            : 'Fill in the details to create a new class.'}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -218,23 +216,21 @@ export function ClassForm({ class: editClass, organizations, onSubmit, onCancel 
           </div>
 
           <div className="flex justify-end gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onCancel}
-              disabled={loading}
-            >
+            <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading 
-                ? (editClass ? 'Updating...' : 'Creating...') 
-                : (editClass ? 'Update Class' : 'Create Class')
-              }
+              {loading
+                ? editClass
+                  ? 'Updating...'
+                  : 'Creating...'
+                : editClass
+                  ? 'Update Class'
+                  : 'Create Class'}
             </Button>
           </div>
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }

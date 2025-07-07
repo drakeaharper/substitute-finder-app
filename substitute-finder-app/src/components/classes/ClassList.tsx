@@ -1,106 +1,106 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, GraduationCap, Building, Users, Download } from 'lucide-react';
-import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { classApi, organizationApi } from '../../lib/api';
-import { Class, Organization } from '../../types';
-import { ClassForm } from './ClassForm';
-import { CSVExporter } from '../../lib/export';
-import { useNotifications } from '../../contexts/NotificationContext';
+import React, { useState, useEffect } from 'react'
+import { Plus, Edit, Trash2, GraduationCap, Building, Users, Download } from 'lucide-react'
+import { Button } from '../ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+import { classApi, organizationApi } from '../../lib/api'
+import type { Class, Organization } from '../../types'
+import { ClassForm } from './ClassForm'
+import { CSVExporter } from '../../lib/export'
+import { useNotifications } from '../../contexts/NotificationContext'
 
 export function ClassList() {
-  const { addNotification } = useNotifications();
-  const [classes, setClasses] = useState<Class[]>([]);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editingClass, setEditingClass] = useState<Class | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedOrgId, setSelectedOrgId] = useState<string>('');
+  const { addNotification } = useNotifications()
+  const [classes, setClasses] = useState<Class[]>([])
+  const [organizations, setOrganizations] = useState<Organization[]>([])
+  const [loading, setLoading] = useState(true)
+  const [showForm, setShowForm] = useState(false)
+  const [editingClass, setEditingClass] = useState<Class | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedOrgId, setSelectedOrgId] = useState<string>('')
 
   useEffect(() => {
-    loadData();
-  }, []);
+    loadData()
+  }, [])
 
   const loadData = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       const [classesData, orgsData] = await Promise.all([
         classApi.getAll(),
-        organizationApi.getAll()
-      ]);
-      setClasses(classesData);
-      setOrganizations(orgsData);
-      setError(null);
+        organizationApi.getAll(),
+      ])
+      setClasses(classesData)
+      setOrganizations(orgsData)
+      setError(null)
     } catch (err) {
-      setError('Failed to load classes and organizations');
-      console.error('Error loading data:', err);
+      setError('Failed to load classes and organizations')
+      console.error('Error loading data:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this class?')) return;
-    
+    if (!confirm('Are you sure you want to delete this class?')) return
+
     try {
-      await classApi.delete(id);
-      await loadData();
+      await classApi.delete(id)
+      await loadData()
     } catch (err) {
-      setError('Failed to delete class');
-      console.error('Error deleting class:', err);
+      setError('Failed to delete class')
+      console.error('Error deleting class:', err)
     }
-  };
+  }
 
   const handleFormSubmit = async () => {
-    setShowForm(false);
-    setEditingClass(null);
-    await loadData();
-  };
+    setShowForm(false)
+    setEditingClass(null)
+    await loadData()
+  }
 
   const handleEdit = (cls: Class) => {
-    setEditingClass(cls);
-    setShowForm(true);
-  };
+    setEditingClass(cls)
+    setShowForm(true)
+  }
 
   const handleAdd = () => {
-    setEditingClass(null);
-    setShowForm(true);
-  };
+    setEditingClass(null)
+    setShowForm(true)
+  }
 
   const handleExportClasses = async () => {
     try {
-      CSVExporter.exportClasses(filteredClasses, organizations);
+      CSVExporter.exportClasses(filteredClasses, organizations)
       addNotification({
         title: 'Export Successful',
         body: 'Classes have been exported to CSV',
-        notification_type: 'success'
-      });
+        notification_type: 'success',
+      })
     } catch (error) {
-      console.error('Export failed:', error);
+      console.error('Export failed:', error)
       addNotification({
         title: 'Export Failed',
         body: 'Failed to export classes',
-        notification_type: 'error'
-      });
+        notification_type: 'error',
+      })
     }
-  };
+  }
 
   const getOrganizationName = (orgId: string) => {
-    const org = organizations.find(o => o.id === orgId);
-    return org?.name || 'Unknown Organization';
-  };
+    const org = organizations.find((o) => o.id === orgId)
+    return org?.name || 'Unknown Organization'
+  }
 
-  const filteredClasses = selectedOrgId 
-    ? classes.filter(cls => cls.organization_id === selectedOrgId)
-    : classes;
+  const filteredClasses = selectedOrgId
+    ? classes.filter((cls) => cls.organization_id === selectedOrgId)
+    : classes
 
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-muted-foreground">Loading classes...</div>
       </div>
-    );
+    )
   }
 
   return (
@@ -110,7 +110,7 @@ export function ClassList() {
           <h2 className="text-3xl font-bold">Classes</h2>
           <p className="text-muted-foreground">Manage classes and their details</p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={handleExportClasses}>
             <Download className="w-4 h-4 mr-2" />
@@ -159,8 +159,8 @@ export function ClassList() {
             organizations={organizations}
             onSubmit={handleFormSubmit}
             onCancel={() => {
-              setShowForm(false);
-              setEditingClass(null);
+              setShowForm(false)
+              setEditingClass(null)
             }}
           />
         </div>
@@ -176,10 +176,9 @@ export function ClassList() {
                   {selectedOrgId ? 'No Classes in Selected Organization' : 'No Classes'}
                 </h3>
                 <p className="text-muted-foreground mb-4">
-                  {selectedOrgId 
-                    ? 'This organization doesn\'t have any classes yet.' 
-                    : 'Get started by creating your first class.'
-                  }
+                  {selectedOrgId
+                    ? "This organization doesn't have any classes yet."
+                    : 'Get started by creating your first class.'}
                 </p>
                 <Button onClick={handleAdd}>
                   <Plus className="w-4 h-4 mr-2" />
@@ -204,18 +203,10 @@ export function ClassList() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(cls)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleEdit(cls)}>
                       <Edit className="w-4 h-4" />
                     </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(cls.id)}
-                    >
+                    <Button variant="destructive" size="sm" onClick={() => handleDelete(cls.id)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -246,9 +237,7 @@ export function ClassList() {
                     </div>
                   )}
                   {cls.description && (
-                    <div className="text-sm text-muted-foreground mt-2">
-                      {cls.description}
-                    </div>
+                    <div className="text-sm text-muted-foreground mt-2">{cls.description}</div>
                   )}
                   <div className="text-xs text-muted-foreground pt-2 border-t">
                     Created: {new Date(cls.created_at).toLocaleDateString()}
@@ -260,5 +249,5 @@ export function ClassList() {
         )}
       </div>
     </div>
-  );
+  )
 }

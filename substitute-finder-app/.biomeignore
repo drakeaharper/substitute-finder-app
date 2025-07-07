@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+src-tauri/target
+coverage
+playwright-report
+test-results
+e2e
+.git
+*.log
+*.lock
+bun.lock
+package-lock.json
+yarn.lock
